@@ -71,7 +71,7 @@ Ví dụ:
 
 Địa chỉ IP được phân thành hai loại: private và public
 
-| IPv4 Public | IPv4 Private |
+| IPv4 Private | IPv4 Public |
 |-------------|---------|
 | chỉ được sử dụng trong mạng nội bộ (mạng LAN), không được định tuyến trên môi trường Internet. | là địa chỉ IP sử dụng cho các gói tin đi trên môi trường Internet, được định tuyến trên môi trường Internet, không sử dụng trong mạng LAN. |
 | Có thể được sử dụng lặp đi lặp lại trong các mạng LAN khác nhau. | Địa chỉ public phải là duy nhất cho mỗi host tham gia vào Internet. |
