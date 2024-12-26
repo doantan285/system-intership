@@ -211,9 +211,9 @@ Ví dụ:
 
 Kết quả:
 
-| Cột 1     | Cột 2       | Cột 3   |
+| Cột 1 | Cột 2 | Cột 3 |
 |-----------|-------------|---------|
-| Nội dung 1| Nội dung 2  | Nội dung 3 |
+| Nội dung 1 | Nội dung 2 | Nội dung 3 |
 
 ### 3.9. Chèn đường kẻ ngang
 
