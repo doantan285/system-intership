@@ -7,7 +7,6 @@
 - Từ việc chuẩn hóa dẫn đến việc đảm bảo tính tương thích về mặt công nghệ:Thiết bị khác hãng có thể giao tiếp với nhau.
 - Thúc đẩy kỹ thuật module hóa: nhà sản xuất mạnh về công việc nào thì chỉ tham gia vào lớp công việc đó.
 - Từ 4 đặc điểm trên dẫn đến sự thúc đẩy sự phát triển của ngành công nghệ mạng.
-- Việc phân lớp đơn giản hơn cho dạy và học.
 
 ## Mô hình OSI là gì?
 
@@ -207,10 +206,10 @@ Lớp Physical là lớp thấp nhất trong mô hình OSI, chịu trách nhiệ
 
 **Xử lý dữ liệu ở máy nhận:**
 
-- Tầng 1 - Physical: Nhận dữ liệu từ máy gửi, đồng bộ hóa dữ liệu và chuyển vào vùng đệm dưới dạng chuỗi bit nhị phân trước khi dữ liệu được gửi tới tầng 2 kèm thông báo "dữ liệu đã được nhận".
-- Tầng 2 - Data Link: Kiểm tra FCS trong các frame xem có lỗi trong dữ liệu không. Nếu 1 Frame có lỗi, nó sẽ bị loại bỏ.
-- Tầng 3 - Network: Kiểm tra xem địa chỉ của gói tin nhận được có trùng với địa chỉ của máy nhận không. Nếu đúng, loại bỏ Header của tầng 3 và chuyển đến tầng 4
-- Tầng 4 - Transport: Hỗ trợ phục hồi và xử lý lỗi dữ liệu bằng cách gửi các gói tin ACK, NAK (Các gói tin này được sử dụng để phản hồi xem các gói chứa dữ liệu đã được gửi đến máy nhận hay chưa). Sau khi được phục hồi, chuyển tiếp lên tầng 5.
+- Tầng 1 - Physical: Nhận tín hiệu vật lý từ môi trường truyền và chuyển đổi thành chuỗi bit nhị phân. Đồng bộ hóa dữ liệu và chuyển chuỗi bit này vào tầng 2.
+- Tầng 2 - Data Link: Chuyển chuỗi bit nhị phân thành các frame dựa trên định dạng giao thức. Kiểm tra FCS (Frame Check Sequence) trong frame để phát hiện lỗi trong quá trình truyền, Nếu frame bị lỗi: Loại bỏ frame (không thông báo lại), Nếu frame hợp lệ: Chuyển payload (gói tin từ tầng Network) lên tầng 3.
+- Tầng 3 - Network: Kiểm tra địa chỉ IP đích trong header của gói tin: Nếu địa chỉ IP khớp với máy nhận: Loại bỏ header của tầng 3 và chuyển payload lên tầng 4, Nếu không khớp: Loại bỏ gói tin (hoặc định tuyến lại nếu là router).
+- Tầng 4 - Transport: Hỗ trợ phục hồi và xử lý lỗi dữ liệu bằng cách gửi các gói tin ACK, NAK (Các gói tin này được sử dụng để phản hồi xem các gói chứa dữ liệu đã được gửi đến máy nhận hay chưa). Sau khi dữ liệu được phục hồi (nếu cần), loại bỏ header của tầng 4 và chuyển tiếp lên tầng 5.
 - Tầng 5 - session: Kiểm tra để đảm bảo các gói tin được truyền là nguyên vẹn. Loại bỏ Header của Tầng 5 và chuyển tiếp lên tầng 6.
 - Tầng 6 - Presentation: thực hiện việc chuyển đổi định dạng dữ liệu để xử lý gói tin và chuyển chúng lên tầng 7.
 - Tầng 7 - Application: Tiếp nhận dữ liệu, loại bỏ các header còn lại và kết thúc quá trình nhận dữ liệu.
@@ -222,9 +221,9 @@ Quá trình truyền tệp từ một máy tính nguồn (A) đến một máy t
 - Tầng 7 - Application: Gửi một tệp hình ảnh từ A sang B.
 - Tầng 6 - Presentation: Mã hóa tệp hình ảnh thành định dạng chuẩn (như JPEG) để đảm bảo tính chuẩn hóa trước khi truyền.
 - Tầng 5 - Session: Thiết lập phiên giao tiếp giữa A và B, xác định và duy trì phiên thông qua các thông tin như định danh và thông tin điều khiển.
-- Tầng 4 - Transport: Chia nhỏ tệp hình ảnh thành các đơn vị dữ liệu nhỏ hơn, gọi là segment. Các segment được đánh số thứ tự để đảm bảo tính toàn vẹn và thứ tự đúng trong quá trình truyền.
-- Tầng 3 - Network: Các segment được bổ sung thông tin địa chỉ IP để xác định máy tính đích (B) và máy tính nguồn (A) trong mạng. Các segment được gửi tới địa chỉ IP của máy tính đích.
-- Tầng 2 - Data Link: Các segment được chia thành các frame nhỏ hơn, được gắn thêm thông tin địa chỉ MAC của A và B. Các frame này được truyền qua mạng Ethernet từ A đến B.
+- Tầng 4 - Transport: Chia nhỏ tệp hình ảnh thành các đơn vị dữ liệu nhỏ hơn, gọi là segment. Các segments được đánh số thứ tự để đảm bảo tính toàn vẹn và thứ tự đúng trong quá trình truyền.
+- Tầng 3 - Network: Các segments được bổ sung thông tin địa chỉ IP để xác định máy tính đích (B) và máy tính nguồn (A) trong mạng. Các segments được gửi tới địa chỉ IP của máy tính đích.
+- Tầng 2 - Data Link: Các segments được chia thành các frame nhỏ hơn, được gắn thêm thông tin địa chỉ MAC của A và B. Các frame này được truyền qua mạng Ethernet từ A đến B.
 - Tầng 1 - Physical: Chuyển đổi các frame thành tín hiệu vật lý để truyền qua cáp mạng.
 
 **Cách để hoạt động truyền dữ liệu xảy ra trong mô hình OSI:**
