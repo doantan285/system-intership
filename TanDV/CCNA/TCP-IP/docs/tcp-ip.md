@@ -15,7 +15,7 @@
 | Transport (Vận chuyển) | Đảm bảo truyền dữ liệu đáng tin cậy giữa hai thiết bị đầu cuối, quản lý phân đoạn dữ liệu. | Tầng 4 (Transport) |
 | Application (Ứng dụng) | Cung cấp giao diện cho người dùng và ứng dụng để giao tiếp qua mạng. | Tầng 5 (Session) + Tầng 6 (Presentation) + Tầng 7 (Application) |
 
-**Cách thức hoạt động**: TCP/IP áp dụng  mô hình giao tiếp client-server, trong đó máy khách (client) nhận các dịch vụ (như truy cập trang web) từ một máy chủ (server) trong mạng. TCP/IP là sự kết hợp của hai giao thức như tên gọi. Trong đó, IP chịu trách nhiệm chuyển các gói tin đến địa chỉ đã được xác định. Quy trình hoạt động của IP là thêm các thông tin chỉ đường vào các gói tin để chúng đến được đích quy định. TCP kiểm tra và đảm bảo an toàn cho từng gói tin khi chúng đi qua mỗi trạm. Khi TCP nhận thấy gói tin bị lỗi trong quá trình truyền vận, một tín hiệu sẽ được phát ta và yêu cầu hệ thống máy chủ gửi lại một gói tin khác.
+**Cách thức hoạt động**: TCP/IP áp dụng  mô hình giao tiếp client-server, trong đó máy khách (client) nhận các dịch vụ (như truy cập trang web) từ một máy chủ (server) trong mạng. TCP/IP là sự kết hợp của hai giao thức như tên gọi. Trong đó, IP chịu trách nhiệm chuyển các gói tin đến địa chỉ đã được xác định. Quy trình hoạt động của IP là thêm các thông tin chỉ đường vào các gói tin để chúng đến được đích quy định. TCP kiểm tra và đảm bảo an toàn cho từng gói tin khi chúng đi qua mỗi trạm. Khi TCP nhận thấy gói tin bị lỗi trong quá trình truyền vận, một tín hiệu sẽ được phát ra và yêu cầu hệ thống máy chủ gửi lại một gói tin khác.
 
 ## Các layers của TCP/IP
 
@@ -30,9 +30,10 @@
 
 **Chức năng:**
 
-- Giao tiếp với người dùng thông qua giao diện ứng dụng.
-- Chuyển đổi dữ liệu thành định dạng phù hợp cho việc truyền qua mạng.
-- Cung cấp giao thức cụ thể cho các loại ứng dụng khác nhau.
+- Định dạng dữ liệu từ ứng dụng phù hợp với giao thức sử dụng, Tạo các yêu cầu hoặc phản hồi theo định dạng của giao thức.
+- Chọn giao thức thích hợp để truyền dữ liệu dựa trên yêu cầu của người dùng hoặc ứng dụng.
+- Cung cấp các dịch vụ như duyệt web, gửi email, truyền file, phân giải tên miền, kết nối từ xa, v.v.
+- Gửi dữ liệu đã chuẩn bị xuống tầng Transport để xử lý và truyền đi qua mạng.
 
 **Ví dụ giao thức:**
 
@@ -53,7 +54,7 @@
 
 **Chức năng:**
 
-- Phân mảnh dữ liệu: Chia nhỏ dữ liệu tầng Application thành các phân đoạn.
+- Phân mảnh dữ liệu: Chia nhỏ dữ liệu tầng Application thành các phân đoạn (segments) để truyền qua mạng và tái hợp thành dữ liệu gốc khi đến đích.
 - Truyền tải đáng tin cậy: Sử dụng TCP để đảm bảo dữ liệu đầy đủ, đúng thứ tự.
 - Truyền tải nhanh chóng: Sử dụng UDP cho các ứng dụng yêu cầu tốc độ cao và độ trễ thấp.
 - Kiểm soát lưu lượng: Điều chỉnh tốc độ truyền dữ liệu để tránh tắc nghẽn.
@@ -162,7 +163,7 @@
 
 ## Giao thức TCP và UDP
 
-### TCP (Transmission Control Protocol)
+### 1. TCP (Transmission Control Protocol)
 
 **Kết nối ba bước (3-way handshake):** Thiết lập kết nối trước khi truyền dữ liệu bằng ba bước: SYN -> SYN-ACK -> ACK.
 
@@ -173,7 +174,7 @@
 
 **Ứng dụng:** sử dụng trong các tình huống cần truyền tải chính xác dữ liệu, chẳng hạn: tải file, duyệt web, gửi email.
 
-### UDP (User Datagram Protocol)
+### 2. UDP (User Datagram Protocol)
 
 **Không cần thiết lập kết nối:** Gửi dữ liệu trực tiếp mà không cần bước thiết lập ban đầu, giúp tiết kiệm thời gian và tăng tốc độ.
 
@@ -184,7 +185,7 @@
 
 **Ứng dụng:** Sử dụng trong các tình huống ưu tiên tốc độ hơn độ tin cậy, chẳng hạn: truyền video trực tuyến, gọi VoIP, game online.
 
-### Khác nhau giữa giao thức TCP và UDP
+### 3. Khác nhau giữa giao thức TCP và UDP
 
 | Tiêu chí | TCP | UDP |
 |-----------|-------------|---------|
