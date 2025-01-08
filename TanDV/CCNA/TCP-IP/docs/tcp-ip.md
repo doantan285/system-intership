@@ -2,6 +2,8 @@
 
 ## TCP/IP là gì?
 
+![TCP-IP_model](../images/tcp-ip_model.png)
+
 **Mô hình TCP/IP** (Transmission Control Protocol/Internet Protocol) là một mô hình mạng được thiết kế để mô tả cách các thiết bị giao tiếp trên mạng internet và các máy tính khác. Đây là mô hình chuẩn và phổ biến trong các hệ thống mạng hiện nay.
 
 **Mô hình TCP/IP** được xây dựng dựa trên thực tế hoạt động của các giao thức, khác với mô hình OSI mang tính lý thuyết hơn.
@@ -15,9 +17,13 @@
 | Transport (Vận chuyển) | Đảm bảo truyền dữ liệu đáng tin cậy giữa hai thiết bị đầu cuối, quản lý phân đoạn dữ liệu. | Tầng 4 (Transport) |
 | Application (Ứng dụng) | Cung cấp giao diện cho người dùng và ứng dụng để giao tiếp qua mạng. | Tầng 5 (Session) + Tầng 6 (Presentation) + Tầng 7 (Application) |
 
+![TCP-IP_process](../images/tcp-ip_process.png)
+
 **Cách thức hoạt động**: TCP/IP áp dụng  mô hình giao tiếp client-server, trong đó máy khách (client) nhận các dịch vụ (như truy cập trang web) từ một máy chủ (server) trong mạng. TCP/IP là sự kết hợp của hai giao thức như tên gọi. Trong đó, IP chịu trách nhiệm chuyển các gói tin đến địa chỉ đã được xác định. Quy trình hoạt động của IP là thêm các thông tin chỉ đường vào các gói tin để chúng đến được đích quy định. TCP kiểm tra và đảm bảo an toàn cho từng gói tin khi chúng đi qua mỗi trạm. Khi TCP nhận thấy gói tin bị lỗi trong quá trình truyền vận, một tín hiệu sẽ được phát ra và yêu cầu hệ thống máy chủ gửi lại một gói tin khác.
 
 ## Các layers của TCP/IP
+
+![TCP-IP_layers](../images/tcp-ip_layers.png)
 
 ### 1. Tầng Application (Ứng dụng)
 
@@ -125,6 +131,8 @@
 
 ## So sánh mô hình TCP/IP với mô hình OSI
 
+![prepare](../images/prepare.png)
+
 `Điểm giống`
 
 - Đều là mô hình tham chiếu được thiết kế để mô tả cách truyền dữ liệu qua mạng.
@@ -186,6 +194,8 @@
 **Ứng dụng:** Sử dụng trong các tình huống ưu tiên tốc độ hơn độ tin cậy, chẳng hạn: truyền video trực tuyến, gọi VoIP, game online.
 
 ### 3. Khác nhau giữa giao thức TCP và UDP
+
+![different](../images/different.png)
 
 | Tiêu chí | TCP | UDP |
 |-----------|-------------|---------|

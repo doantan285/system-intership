@@ -10,6 +10,8 @@
 
 ## Mô hình OSI là gì?
 
+![OSI_model](../images/OSI_model.png)
+
 **Mô hình OSI (Open Systems Interconnection)** là một mô hình tham chiếu chuẩn quốc tế được phát triển bởi ISO (International Organization for Standardization) để chuẩn hóa cách các thiết bị và hệ thống mạng giao tiếp với nhau. Mô hình OSI chia quá trình giao tiếp mạng thành bảy lớp (layers), mỗi lớp có nhiệm vụ cụ thể, giúp đảm bảo việc truyền dữ liệu từ nguồn đến đích diễn ra hiệu quả và chính xác.
 
 **Các lớp mô hình OSI** được đánh số từ 7 đến 1:
@@ -30,6 +32,8 @@
 - Giáo dục và đào tạo: OSI là một công cụ hữu dụng để giảng dạy các khái niệm cơ bản và phức tạp về mạng.
 
 ## Các lớp của mô hình OSI: Khái niệm, đặc điểm, chức năng
+
+![OSI_layers](../images/osi_layers.png)
 
 ### Lớp 7 - Application (Ứng dụng)
 
@@ -192,6 +196,8 @@ Lớp Physical là lớp thấp nhất trong mô hình OSI, chịu trách nhiệ
 - Quy định tín hiệu vật lý: Định nghĩa dạng tín hiệu, mức điện áp, và các tham số kỹ thuật khác.
 
 ## Quy trình hoạt động của mô hình OSI
+
+![osi_process](../images/osi_process.png)
 
 **Xử lý dữ liệu từ máy gửi**:
 
