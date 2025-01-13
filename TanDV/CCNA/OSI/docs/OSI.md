@@ -37,7 +37,7 @@
 
 ### Lớp 7 - Application (Ứng dụng)
 
-**Khái niệm:** được đặt ở vị trí cao nhất (lớp 7), thiết lập giao diện người dùng với mô hình OSI. Tầng này cung cấp những giao thức cần thiết để ứng dụng có thể trao đổi thông tin và hiển thị dữ liệu một cách có ý nghĩa đến người dùng.
+**Khái niệm:** được đặt ở vị trí cao nhất (lớp 7), phần lớn các ứng dụng chạy trên tầng này. Tầng này cung cấp những giao thức cần thiết để ứng dụng có thể trao đổi thông tin và hiển thị dữ liệu một cách có ý nghĩa đến người dùng.
 
 **Đặc điểm:**
 
@@ -75,14 +75,12 @@
 - Nén dữ liệu: Giảm kích thước dữ liệu để tối ưu hóa băng thông mạng mà không làm mất dữ liệu.
 - Mã hóa và giải mã: Đảm bảo dữ liệu được bảo mật khi truyền tải bằng cách mã hóa trước khi gửi và giải mã khi nhận.
 - Độc lập với nền tảng: Lớp này cung cấp một chuẩn chung cho việc truyền dữ liệu, bất kể các hệ thống gửi và nhận có sử dụng hệ điều hành hoặc kiến trúc phần cứng khác nhau.
-- Đóng vai trò trung gian: Lớp Presentation là cầu nối giữa dữ liệu thô từ lớp Application và dữ liệu được định dạng mà lớp Session sử dụng.
 
 **Chức năng:**
 
 - Mã hóa/Giải mã (Encryption/Decryption): Tầng Trình bày có khả năng mã hóa dữ liệu trước khi truyền và giải mã dữ liệu khi nhận, đảm bảo tính bảo mật trong quá trình truyền dữ liệu trên mạng.
 - Nén/Giải nén (Compression/Decompression): Nén dữ liệu để giảm dung lượng truyền và giải nén dữ liệu khi nhận, giúp tăng tốc độ truyền dữ liệu và giảm sử dụng băng thông mạng.
 - Định dạng dữ liệu (Data Formatting): Tầng Trình bày thực hiện việc chuyển đổi dữ liệu từ định dạng của ứng dụng thành định dạng chuẩn để truyền qua mạng và ngược lại, đảm bảo tính tương thích giữa các ứng dụng và hệ thống khác nhau.
-- Quản lý phiên (Session Management): Quản lý thông tin phiên giao tiếp giữa các ứng dụng, hỗ trợ việc khởi tạo, duy trì và kết thúc phiên giao tiếp, đồng bộ hóa các hoạt động truyền dữ liệu và xử lý lỗi.
 
 ### Lớp 5 - Session (Phiên)
 
@@ -195,52 +193,24 @@ Lớp Physical là lớp thấp nhất trong mô hình OSI, chịu trách nhiệ
   - Full-duplex: Truyền hai chiều đồng thời (VD: điện thoại).
 - Quy định tín hiệu vật lý: Định nghĩa dạng tín hiệu, mức điện áp, và các tham số kỹ thuật khác.
 
-## Quy trình hoạt động của mô hình OSI
+## Workflow - Quy trình hoạt động của mô hình OSI
 
-![osi_process](../images/osi_process.png)
+![osi_process](../images/OSI_workflow.png)
 
-**Xử lý dữ liệu từ máy gửi**:
+- Bước 1: Khi thiết bị A gửi dữ liệu đến thiết bị B qua mạng bằng HTTP, một HTTP header được thêm vào lớp ứng dụng.
+- Bước 2: TCP header hoặc UDP header được thêm vào dữ liệu. Nó được đóng gói thành TCP segments ở lớp Transport. Header này chứa cổng nguồn, cổng đích, và số thứ tự.
+  - Chia thành cách segment: Dữ liệu từ tầng ứng dụng thường có kích thước lớn, việc chia nhỏ dữ liệu thành các segment giúp quản lý việc truyền tải hiệu quả hơn. Nếu một segment bị lỗi hoặc mất, chỉ cần gửi lại segment đó thay vì toàn bộ dữ liệu. Việc này phù hợp với giới hạn kích thước gói tin (MTU - Maximum Transmission Unit) mà tầng Network có thể xử lý.
+  - Gắn số cổng nguồn và cổng đích: Mỗi ứng dụng trên thiết bị gửi/nhận đều sử dụng một cổng (port) để giao tiếp. Số cổng nguồn cho biết ứng dụng nào trên thiết bị gửi tạo ra dữ liệu, và số cổng đích xác định ứng dụng nào trên thiết bị nhận sẽ xử lý dữ liệu.
+- Bước 3: Sau đó, các segments được đóng gói bằng một IP header tại lớp Network. IP header chứa địa chỉ IP nguồn và đích.
+  - Đóng gói segment: Tầng network cần thêm thông tin như địa chỉ IP nguồn và đích để định tuyến gói tin qua các mạng khác nhau (Gói hóa - encapsulation).
+  - Địa chỉ IP nguồn và đích: xác định vị trí logic của thiết bị trên mạng. Địa chỉ này đảm bảo gói tin có thể đến đúng đích qua các mạng trung gian. IP nguồn cho biết gói tin xuất phát từ đâu để thiết bị nhận có thể phản hồi lại nếu cần. IP đích xác định thiết bị nhận, giúp các router biết các gói tin cần được chuyển đến đâu.
+- Bước 4: Tại tầng Data Link, MAC header được thêm vào gói dữ liệu IP (IP datagram). MAC header chứa địa chỉ MAC nguồn và đích. Tầng này đóng gói gói tin thành khung dữ liệu (frame).
+  - Đóng gói packet thành khung: Thêm các thông tin cần thiết để truyền dữ liệu qua mạng cục bộ (LAN), như địa chỉ MAC nguồn/đích, kiểm tra lỗi (CRC), và các thông tin khác. Khung dữ liệu là đơn vụ truyền tải cơ bản trong mạng LAN.
+  - Địa chỉ MAC xác định thiết bị vật lý trong mạng LAN, không phụ thuộc vào địa chỉ IP. MAC nguồn cho biết thiết bị nào trong mạng gửi dữ liệu, MAC đích xác định thiết bị nào nhận dữ liệu. Địa chỉ MAC cần thiết để các switch hoặc thiết bị mạng định tuyến dữ liệu đến đúng thiết bị đích
+- Bước 5: Tại lớp Physical, frame được gửi qua mạng dưới dạng luồng bit.
+- Bước 6-10: Khi thiết bị B nhận được các bit từ mạng, nó sẽ khởi tạo quy trình giải đóng gói, ngược lại với quy trình đóng gói. Các header dần được loại bỏ qua từng lớp cho đến khi thiết bị B có thể truy cập dữ liệu gốc.
 
-- Tầng 7 - Application: Truyền dữ liệu vào hệ thống dưới các dạng văn bản, hình ảnh, và các định dạng khác.
-- Tầng 6 - Presentation: Nhận thông tin từ tầng 7, mã hóa và nén chúng trước khi tiếp tục lưu trữ.
-- Tầng 5: Session: Thêm các thông tin cần thiết (như thông tin gửi/nhận) trước khi tiếp tục qua các bước tiếp theo. Đây có thể được xem như một bước xác nhận thông tin.
-- Tầng 4 - Transport: Dữ liệu được phân chia thành các đơn vị nhỏ hơn và cũng bổ sung thêm thông tin về phương thức vận chuyển để đảm bảo tính bảo mật.
-- Tầng 3 - Network: Các phần dữ liệu được chia nhỏ tiếp tục được phân tách thành các gói thông tin riêng lẻ, sau đó các gói thông tin này được chuyển đi theo tuyến được đã được xác định trước.
-- Tầng 2 - Data Link: Các gói thông tin nhỏ vẫn tiếp tục được chia thành các Frame, đồng thời được bổ sung thông tin kiểm tra để đảm bảo rằng khi thông tin đến nơi, máy nhận có thể hiểu chúng.
-- Tầng 1 - Physical: Các thông tin xuống đây sẽ được chuyển đổi thành các chuỗi bit nhị phân, sau đó được truyền qua các thiết bị truyền dẫn như cáp quang để đến máy nhận.
-- Các gói tin dữ liệu khi đi qua các tầng dưới sẽ được bổ sung thêm các header tương ứng của từng tầng, với ngoại lệ là ở tầng 2, gói tin còn được thêm FCS.
-
-**Xử lý dữ liệu ở máy nhận:**
-
-- Tầng 1 - Physical: Nhận tín hiệu vật lý từ môi trường truyền và chuyển đổi thành chuỗi bit nhị phân. Đồng bộ hóa dữ liệu và chuyển chuỗi bit này vào tầng 2.
-- Tầng 2 - Data Link: Chuyển chuỗi bit nhị phân thành các frame dựa trên định dạng giao thức. Kiểm tra FCS (Frame Check Sequence) trong frame để phát hiện lỗi trong quá trình truyền, Nếu frame bị lỗi: Loại bỏ frame (không thông báo lại), Nếu frame hợp lệ: Chuyển payload (gói tin từ tầng Network) lên tầng 3.
-- Tầng 3 - Network: Kiểm tra địa chỉ IP đích trong header của gói tin: Nếu địa chỉ IP khớp với máy nhận: Loại bỏ header của tầng 3 và chuyển payload lên tầng 4, Nếu không khớp: Loại bỏ gói tin (hoặc định tuyến lại nếu là router).
-- Tầng 4 - Transport: Hỗ trợ phục hồi và xử lý lỗi dữ liệu bằng cách gửi các gói tin ACK, NAK (Các gói tin này được sử dụng để phản hồi xem các gói chứa dữ liệu đã được gửi đến máy nhận hay chưa). Sau khi dữ liệu được phục hồi (nếu cần), loại bỏ header của tầng 4 và chuyển tiếp lên tầng 5.
-- Tầng 5 - session: Kiểm tra để đảm bảo các gói tin được truyền là nguyên vẹn. Loại bỏ Header của Tầng 5 và chuyển tiếp lên tầng 6.
-- Tầng 6 - Presentation: thực hiện việc chuyển đổi định dạng dữ liệu để xử lý gói tin và chuyển chúng lên tầng 7.
-- Tầng 7 - Application: Tiếp nhận dữ liệu, loại bỏ các header còn lại và kết thúc quá trình nhận dữ liệu.
-
-**VD về truyền dữ liệu theo mô hình OSI:**
-
-Quá trình truyền tệp từ một máy tính nguồn (A) đến một máy tính đích (B) trong mạng Ethernet.
-
-- Tầng 7 - Application: Gửi một tệp hình ảnh từ A sang B.
-- Tầng 6 - Presentation: Mã hóa tệp hình ảnh thành định dạng chuẩn (như JPEG) để đảm bảo tính chuẩn hóa trước khi truyền.
-- Tầng 5 - Session: Thiết lập phiên giao tiếp giữa A và B, xác định và duy trì phiên thông qua các thông tin như định danh và thông tin điều khiển.
-- Tầng 4 - Transport: Chia nhỏ tệp hình ảnh thành các đơn vị dữ liệu nhỏ hơn, gọi là segment. Các segments được đánh số thứ tự để đảm bảo tính toàn vẹn và thứ tự đúng trong quá trình truyền.
-- Tầng 3 - Network: Các segments được bổ sung thông tin địa chỉ IP để xác định máy tính đích (B) và máy tính nguồn (A) trong mạng. Các segments được gửi tới địa chỉ IP của máy tính đích.
-- Tầng 2 - Data Link: Các segments được chia thành các frame nhỏ hơn, được gắn thêm thông tin địa chỉ MAC của A và B. Các frame này được truyền qua mạng Ethernet từ A đến B.
-- Tầng 1 - Physical: Chuyển đổi các frame thành tín hiệu vật lý để truyền qua cáp mạng.
-
-**Cách để hoạt động truyền dữ liệu xảy ra trong mô hình OSI:**
-
-- Người gửi ở tầng ứng dụng: Chuyển dữ liệu xuống tầng tiếp theo.
-- Thêm tiêu đề và địa chỉ: Mỗi tầng thêm tiêu đề và địa chỉ riêng của mình và dữ liệu trước khi chuyển tiếp.
-- Truyền dữ liệu qua các tầng: Dữ liệu được chuyển tiếp qua các tầng cho đến khi nó đến được phương tiện truyền dẫn vật lý.
-- Xử lý tại đầu cuối của phương tiện: Tại đầu cuối của phương tiện, mỗi tầng xử lý dữ liệu dựa trên các tiêu đề ở cấp độ của nó.
-- Giải nén tại thiết bị nhận: dữ liệu được truyền lên từng tầng tại đầu của của thiết bị nhận và dần dần được giải nén cho đến khi dữ liệu được gửi đến ứng dụng ở đầu kia.
-
-## ƯU/Nhược điểm của mô hình OSI
+## Ưu/Nhược điểm của mô hình OSI
 
 **ƯU điểm:**
 
