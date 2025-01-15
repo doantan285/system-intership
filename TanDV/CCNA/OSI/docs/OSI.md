@@ -37,6 +37,8 @@
 
 ### Lớp 7 - Application (Ứng dụng)
 
+![application_layer](../images/application_layer.png)
+
 **Khái niệm:** được đặt ở vị trí cao nhất (lớp 7), phần lớn các ứng dụng chạy trên tầng này. Tầng này cung cấp những giao thức cần thiết để ứng dụng có thể trao đổi thông tin và hiển thị dữ liệu một cách có ý nghĩa đến người dùng.
 
 **Đặc điểm:**
@@ -67,6 +69,8 @@
 
 ### Lớp 6 - Presentation (Trình bày)
 
+![presentation_layer](../images/presentation_layer.png)
+
 **Khái niệm:** Là lớp thứ 6 trong mô hình OSI, đảm nhận nhiệm vụ chuyển đổi dữ liệu giữa định dạng mà ứng dụng sử dụng và định dạng phù hợp để truyền tải trên mạng. Đây là lớp chịu trách nhiệm chuẩn hóa dữ liệu để các hệ thống khác nhau có thể hiểu được, bất kể nền tảng hoặc ngôn ngữ lập trình. Lớp thứ 6 trong mô hình OSI, đảm bảo dữ liệu được định dạng đúng cách để các hệ thống khác nhau có thể hiểu được khi truyền qua mạng.
 
 **Đặc điểm:**
@@ -83,6 +87,8 @@
 - Định dạng dữ liệu (Data Formatting): Tầng Trình bày thực hiện việc chuyển đổi dữ liệu từ định dạng của ứng dụng thành định dạng chuẩn để truyền qua mạng và ngược lại, đảm bảo tính tương thích giữa các ứng dụng và hệ thống khác nhau.
 
 ### Lớp 5 - Session (Phiên)
+
+![session_layer](../images/session_layer.png)
 
 **Khái niệm:** Là lớp thứ 5 trong mô hình OSI, đảm nhận nhiệm vụ quản lý và kiểm soát các phiên giao tiếp giữa các hệ thống. Nó tạo lập, duy trì, đồng bộ hóa và kết thúc các phiên giao tiếp, đảm bảo dữ liệu được truyền tải một cách chính xác và liên tục giữa các thiết bị.
 
@@ -103,6 +109,8 @@
 - Quản lý đồng thời: Cho phép nhiều kết nối phiên hoạt động đồng thời mà không gây xung đột.
 
 ### Lớp 4 - Transport (Vận chuyển)
+
+![transport_layer](../images/transport_layer.png)
 
 **Khái niệm:** Là lớp thứ 4 trong mô hình OSI, chịu trách nhiệm cung cấp dịch vụ truyền dữ liệu đáng tin cậy giữa các hệ thống đầu cuối (end-to-end). Nó phân phối dữ liệu từ lớp trên (Application) xuống lớp dưới (Network), đồng thời đảm bảo dữ liệu được gửi đúng thứ tự, không bị mất mát hoặc trùng lặp.
 
@@ -129,6 +137,8 @@
 
 ### Lớp 3 - Network (Mạng)
 
+![network_layer](../images/network_layer.png)
+
 **Khái niệm:** Là lớp thứ 3 trong mô hình OSI, chịu trách nhiệm định tuyến và truyền dữ liệu từ thiết bị nguồn đến thiết bị đích qua nhiều mạng khác nhau. Nó quản lý địa chỉ logic (IP Address) và xác định đường đi tốt nhất cho dữ liệu.
 
 **Đặc điểm:**
@@ -150,6 +160,8 @@
 
 ### Lớp 2 - Data Link (Liên kết dữ liệu)
 
+![datalink_layer](../images/datalink_layer.png)
+
 **Khái niệm:** là lớp thứ 2 trong mô hình OSI, chịu trách nhiệm đảm bảo dữ liệu được truyền tải đáng tin cậy qua liên kết vật lý giữa hai thiết bị. Lớp này tạo khung dữ liệu (frame), xử lý lỗi trong quá trình truyền và quản lý truy cập vào môi trường truyền thông.
 
 **Đặc điểm:**
@@ -169,6 +181,8 @@
 - Điều khiển luồng dữ liệu: Điều chỉnh tốc độ truyền dữ liệu giữa các thiết bị để tránh mất mát dữ liệu.
 
 ### Lớp 1 - Physical (Vật lý)
+
+![physical_layer](../images/physical_layer.png)
 
 **Khái niệm:**
 Lớp Physical là lớp thấp nhất trong mô hình OSI, chịu trách nhiệm về việc truyền tải các tín hiệu vật lý qua các phương tiện truyền dẫn (cáp đồng, cáp quang, sóng vô tuyến, v.v.). Lớp này định nghĩa các đặc điểm kỹ thuật của phần cứng cần thiết để truyền dữ liệu giữa các thiết bị mạng.
