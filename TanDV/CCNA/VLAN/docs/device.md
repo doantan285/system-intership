@@ -1,5 +1,16 @@
 # Các thiết bị mạng
 
+## Modem
+
+![modem](../images/modem.png)
+
+Khái niệm: Modem (Modulator - Demodulator) là một thiết bị mạng dùng để kết nối với nhà cung cấp dịch vụ Internet (ISP), giúp chuyển đổi tín hiệu số thành tín hiệu analog (hoặc ngược lại) để truyền dữ liệu qua các phương tiện truyền dẫn như cáp quang, ADSL, cáp đồng trục hoặc 4G/5G.
+
+Chức năng:
+
+- Điều chế & giải điều chế tín hiệu: Chuyển đổi tín hiệu số ↔ analog để truyền trên đường dây điện thoại, cáp quang, sóng vô tuyến.
+- Kết nối Internet: Nhận tín hiệu từ ISP và cung cấp kết nối cho các thiết bị trong mạng.
+
 ## Router (Bộ định tuyến)
 
 ![router](../images/router.png)

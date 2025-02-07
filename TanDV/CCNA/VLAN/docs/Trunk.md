@@ -117,6 +117,8 @@ Trong đó slot/port_number là cổng cần cấu hình. Lựa chọn một tro
 
 ### VTP (VLAN Trunking Protocol)
 
+![VTP](../images/VTP.png)
+
 VTP (VLAN Trunking Protocol) là giao thức độc quyền của Cisco, được dùng để quản lý và đồng bộ hóa VLAN trên nhiều Switch trong cùng một hệ thống mạng.
 
 `Mục đích`
