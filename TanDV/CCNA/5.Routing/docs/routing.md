@@ -89,12 +89,6 @@ Router(config)# ip route (network-address) (subnet-mask) (next-hop ip address/ e
 
 ![Routing_protocol](../images/routing_protocol.png)
 
-**RIP:** sử dụng “hop count” để tìm đường đi ngắn nhất từ một mạng đến mạng khác, trong đó “hop count” đếm số lượng thiết bị định tuyến mà một gói tin cần đi qua trên đường đi. Khi một gói tin chuyển từ một mạng sang mạng khác, điều này được gọi là “hop.”
-
-**OSPF:** thường được sử dụng bởi các thiết bị định tuyến để động cơ xác định các đường đi nhanh nhất và ngắn nhất để gửi các gói tin đến đích. OSPF được sử dụng trong các mạng lớn và có cấu trúc phức tạp hơn để đảm bảo việc định tuyến hiệu quả.
-
-**BGP:** được sử dụng để thông báo về việc quản lý các mạng nào điều khiển các địa chỉ IP và các mạng nào kết nối với nhau. Các mạng lớn thực hiện các thông báo BGP này được gọi là hệ thống tự trị. BGP là một giao thức định tuyến động, và nó đóng vai trò quan trọng trong việc quản lý việc kết nối giữa các mạng lớn trên Internet.
-
 ### So sánh static routing và dynamic routing
 
 | Tiêu chí | Static Routing | Dynamic Routing |
