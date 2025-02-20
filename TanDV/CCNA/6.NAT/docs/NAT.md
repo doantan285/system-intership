@@ -4,6 +4,8 @@
 
 NAT (Network Address Translation) là một kỹ thuật trong mạng máy tính cho phép chuyển đổi địa chỉ IP giữa các thiết bị trong mạng nội bộ và mạng bên ngoài. Nó được sử dụng để ánh xạ địa chỉ IP riêng (private IP) của các thiết bị trong mạng nội bộ sang một địa chỉ IP công cộng (public IP) khi chúng truy cập internet.
 
+![nat](../images/nat.png)
+
 **Chức năng chính:**
 
 - **Chia sẻ địa chỉ IP Public:** NAT cho phép nhiều thiết bị trong mạng nội bộ (sử dụng địa chỉ IP Private) chia sẻ một hoặc một số địa chỉ IP Public để truy cập internet. Điều này rất quan trọng khi số lượng địa chỉ IP Public có hạn trong IPv4.
@@ -41,7 +43,7 @@ Quá trình này thường diễn ra tại router hoặc firewall để quản l
 
 **5. Chuyển đổi lại địa chỉ IP:**
 
-- Router Network Address Translation thay đổi địa chỉ IP đích từ địa chỉ IP công cộng trở lại địa chỉ IP riêng của thiết bị trong mạng nội bộ.
+- Router NAT thay đổi địa chỉ IP đích từ địa chỉ IP công cộng trở lại địa chỉ IP riêng của thiết bị trong mạng nội bộ.
 - Gói tin sau đó được gửi đến thiết bị ban đầu trong mạng nội bộ.
 
 **6. Kết thúc phiên:**
@@ -49,6 +51,8 @@ Quá trình này thường diễn ra tại router hoặc firewall để quản l
 - Khi phiên kết nối kết thúc, ánh xạ trong bảng NAT sẽ được xóa hoặc thời gian sử dụng ánh xạ sẽ hết hạn.
 
 ## 3. Phân loại NAT
+
+![type](../images/type.png)
 
 NAT được phân thành ba loại chính dựa trên cách thức ánh xạ địa chỉ IP giữa mạng nội bộ và mạng bên ngoài: NAT tĩnh, NAT động, và NAT Overload (PAT).
 
