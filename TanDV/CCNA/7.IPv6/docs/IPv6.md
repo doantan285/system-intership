@@ -58,19 +58,55 @@ Ví dụ: Địa chỉ `1080:0000:0000:0070:0000:0989:CB45:345F` được nén t
 
 ### IPv6 Unicast
 
-Địa chỉ Unicast đại diện cho một thiết bị duy nhất trong mạng. Dữ liệu được gửi đến một địa chỉ Unicast sẽ chỉ đến đúng thiết bị đó. IPv6 Unicast dùng để định danh các thiết bị (như máy tính, máy chủ) trong mạng, tương tự như địa chỉ IP trong IPv4.
+Địa chỉ Unicast đại diện cho một thiết bị duy nhất trong mạng. Dữ liệu được gửi đến một địa chỉ Unicast sẽ chỉ đến đúng thiết bị đó. IPv6 Unicast dùng để định danh các thiết bị (như máy tính, máy chủ) trong mạng, tương tự như địa chỉ IP trong IPv4. IPv6 unicast gồm 4 loại:
 
-**Các loại Unicast:**
+***Global Unicast Address (GUA):***
 
-- **Global Unicast:** Địa chỉ công cộng có thể truy cập qua Internet. Ví dụ: `2001:0db8::1`.
-- **Link-local Unicast:** Tự động gán cho thiết bị trong mạng nội bộ, không định tuyến ra ngoài. Ví dụ: `fe80::1`.
-- **Unique Local Address** (ULA): Được dùng trong mạng nội bộ, tương tự địa chỉ riêng trong IPv4 (192.168.x.x). Ví dụ: `fc00::1`.
+- Global unicast addresses (GUA) là địa chỉ IPv6 toàn cầu (tương tự như địa chỉ public của IPv4). Phạm vi định vị của GUA là toàn hệ thống IPv6 trên thế giới.
+
+![gua](../images/gua.png)
+
+- 001: Ba bit đầu luôn có giá trị là 001 (Prefix=2000::/3).
+- Global Routing Prefix (45 bit): Là địa chỉ được cung cấp cho công ty, cơ quan, tập đoàn hay một tổ chức nào đó khi đăng ký địa chỉ IPv6 public.
+- Subnet ID (16 bit): Các tổ chức có thể tự quản lý, phân bổ, cấp phát và tổ chức định tuyến bên trong mạng của mình. Với 16 bit, có thể tạo nên 65535 mạng con (subnet) hoặc nhiều cấp định tuyến phân cấp hiệu quả trong mạng của tổ chức.
+- Interface ID (64 bit): là địa chỉ của các interface trong subnet.
+
+***Link-local Address (LLA):***
+
+- Sử dụng bởi các node khi giao tiếp với các node lân cận (neighbor node). Phạm vi của dạng địa chỉ unicast này là trên một đường kết nối (phạm vi link). Địa chỉ link-local luôn được cấu hình một cách tự động.
+
+![lla](../images/lla.png)
+
+- Địa chỉ link-local bắt đầu bởi 10 bit prefix là FE80::/10, tiếp theo là 54 bit 0, 64 bit còn lại là phần định danh giao diện (interface ID).
+- VD:
+  - `FE80::1CEF:01BC:FE01:1101`
+  - `FE80::2:1991:AC90:CF10`
+
+***Unique Local Address (ULA):***
+
+- là một loại địa chỉ IPv6 được thiết kế để sử dụng trong mạng nội bộ (LAN hoặc tổ chức), tương tự như địa chỉ Private IP trong IPv4.
+
+![ula](../images/ula.png)
+
+- Prefix: Luôn có giá trị FC (1111 110) hoặc FD (1111 1101).
+- L (Local bit): 1: ULA (FD00::/8), 0: Reserved (FC00::/8).
+- Global ID: Mã nhận dạng duy nhất, được tạo ngẫu nhiên (tránh trùng lặp).
+- Ví dụ:
+  - `FD12:3456:789a::1`
+  - `FD00:1234:5678:abcd::1`
 
 ### IPv6 Multicast
 
 Multicast cho phép gửi dữ liệu đến nhiều thiết bị trong cùng một nhóm. Dữ liệu sẽ được nhận bởi tất cả các thiết bị thuộc nhóm Multicast. IPv6 Multicast được dùng để phát trực tiếp nội dung (ví dụ: hội nghị truyền hình, phát sóng video), quản lý thiết bị trong mạng (ví dụ: thông báo định tuyến).
 
-**Đặc điểm:** Địa chỉ Multicast luôn bắt đầu bằng FF. Ví dụ: `ff02::1` (gửi đến tất cả các thiết bị trong mạng nội bộ).
+![multicast](../images/multicast.png)
+
+- 8 bit đầu tiên trong địa chỉ multicast luôn luôn là 1111 1111 (FF - hexadecimal).
+- Flag (4 bits): Điều khiển đặc tính của multicast (ví dụ: 0 – tĩnh, 1 – tạm thời).
+- Scope (4 bits): Xác định phạm vi multicast (xem bảng bên dưới).
+![scope](../images/scope.png)
+- Group ID được sử dụng để xác định một nhóm multicast. Có những group ID được định nghĩa từ trước (predefined group ID), như Group ID =1 tức là mọi node.
+- VD: Địa chỉ multicast là `ff02::1` có nghĩa Scope ID = 2 và Group ID =1, chỉ định mọi node trong phạm vi một link (link-scope). Điều này giống như broadcast trong địa chỉ IPv4
 
 ### IPv6 Anycast
 
@@ -80,6 +116,60 @@ Multicast cho phép gửi dữ liệu đến nhiều thiết bị trong cùng m�
 
 - Các thiết bị chia sẻ cùng một địa chỉ Anycast.
 - Dữ liệu sẽ được chuyển đến thiết bị có đường dẫn ngắn nhất hoặc hiệu quả nhất.
+
+## IPv6/IPv4 header
+
+![header](../images/header.png)
+
+### Các trường giữ nguyên
+
+- **Version:** Xác định phiên bản IP (4 đối với IPv4 và 6 đối với IPv6).
+- **Source Address:** địa chỉ thiết bị gửi.
+- **Destination Address:** địa chỉ thiết bị nhận.
+
+### Các trường được giữ nhưng đổi tên
+
+- **Traffic class (IPv6) vs Type of Service (IPv4):**
+  - Xác định mức độ ưu tiên và chất lượng dịch vụ (QoS).
+  - Có 2 phần: DSCP và ECN.
+  - DSCP (Differentiated Services Code Point - 6 bit): Đánh dấu mức độ ưu tiên.
+  - ECN (Explicit Congestion Notification - 2 bit): Báo hiệu tắc nghẽn.
+- **Payload Length (IPv6) vs Total Length (IPv4):**
+  - Payload Length: Chỉ xác định kích thước phần dữ liệu (payload), không tính header chính.
+  - Total Length: Xác định tổng kích thước của toàn bộ gói tin (header + payload).
+  - Tối đa 65.535 byte.
+- **Next Header (IPv6) vs Protocol (IPv4):**
+  - Next Header:Xác định phần kế tiếp (giao thức hoặc extension header).
+  - Protocol: Xác định giao thức lớp trên: TCP (6), UDP (17), ICMP (1).
+  - IPv4: Chỉ cho biết giao thức lớp trên. VD: TCP = 6, UDP = 17, ICMP = 1.
+  - IPv6: Linh hoạt hơn, hỗ trợ cả giao thức và các header mở rộng. VD: TCP = 6, UDP = 17, Fragment Header = 44, ESP = 50.
+- **Hop Limit (IPv6) vs TTL (IPv4)**
+  - Giới hạn số lần truyền qua router (hops), tránh vòng lặp vô thời hạn.
+  - Mỗi khi qua một router, giá trị này giảm đi 1. Nếu giảm xuống 0, gói tin bị loại bỏ.
+
+### Các trường còn lại
+
+- **Flow Label (IPv6)** cải thiện QoS và tăng tốc xử lý gói tin.
+
+- Các trường không còn dùng trong IPv6:
+  - IHL (Internet Header Length): IPv6 có kích thước header cố định là 40 byte, không thay đổi, nên không cần trường này.
+  - Identification, Flags, Fragment Offset: IPv6 không cho phép router trung gian phân mảnh gói tin, chỉ có thiết bị gửi (source) thực hiện. Điều này giảm độ trễ và tăng tốc độ xử lý tại router.
+  - Header Checksum: IPv6 loại bỏ kiểm tra lỗi ở header vì tầng giao vận (TCP/UDP) và tầng liên kết dữ liệu đã kiểm tra lỗi rồi. Điều này giúp giảm tải cho router, tăng tốc độ xử lý.
+  - Options và Padding: Các chức năng tùy chọn được chuyển sang Extension Header, giúp header chính của IPv6 đơn giản hơn và dễ mở rộng khi cần. Kích thước IPv6 là cố định nên padding là không cần thiết.
+
+### Điểm khác nhau
+
+| Đặc điểm | IPv6 | IPv4 |
+|-----------|-------------|---------|
+| Kích thước header | Cố định 40 byte. | Biến đổi (20 – 60 byte). |
+| Độ dài địa chỉ | 128 bit (16 byte) | 32 bit (4 byte) |
+| Checksum | Không (giảm tải xử lý tại router). | Có (kiểm tra lỗi ở header). |
+| Phân mảnh | Chỉ thực hiện tại thiết bị gửi. | Được thực hiện tại thiết bị gửi và router. |
+| Next Header | Chỉ định header tiếp theo hoặc extension. | Protocol (giao thức lớp trên). |
+| QoS | Traffic Class + Flow Label (28 bit). | Type of Service (TOS – 8 bit). |
+| Option | Dùng extension header bên ngoài. | Nằm trong header chính. |
+| Bảo mật | Hỗ trợ IPSec mặc định. | Không tích hợp sẵn. |
+| Tối ưu hóa tốc độ | Nhanh hơn nhờ header đơn giản hơn. | Chậm hơn do nhiều trường kiểm tra. |
 
 ## Dual stack
 
