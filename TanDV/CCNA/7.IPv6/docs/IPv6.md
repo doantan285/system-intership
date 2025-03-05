@@ -58,7 +58,7 @@ Ví dụ: Địa chỉ `1080:0000:0000:0070:0000:0989:CB45:345F` được nén t
 
 ### IPv6 Unicast
 
-Địa chỉ Unicast đại diện cho một thiết bị duy nhất trong mạng. Dữ liệu được gửi đến một địa chỉ Unicast sẽ chỉ đến đúng thiết bị đó. IPv6 Unicast dùng để định danh các thiết bị (như máy tính, máy chủ) trong mạng, tương tự như địa chỉ IP trong IPv4. IPv6 unicast gồm 4 loại:
+Địa chỉ Unicast đại diện cho một thiết bị duy nhất trong mạng. Dữ liệu được gửi đến một địa chỉ Unicast sẽ chỉ đến đúng thiết bị đó. IPv6 Unicast dùng để định danh các thiết bị (như máy tính, máy chủ) trong mạng, tương tự như địa chỉ IP trong IPv4. IPv6 unicast gồm:
 
 ***Global Unicast Address (GUA):***
 

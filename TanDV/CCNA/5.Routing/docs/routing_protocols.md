@@ -55,7 +55,7 @@ Border Gateway Protocol hoạt động dựa trên nguyên tắc đồng thuận
 
 ## OSPF (Open Shortest Path First)
 
-![bgp_ospf](../images/bgp_ospf.png)
+![OSPF](../images/OSPF.png)
 
 ### Khái niệm OSPF
 
