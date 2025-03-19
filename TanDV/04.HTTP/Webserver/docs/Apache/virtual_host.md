@@ -14,6 +14,8 @@ Có 2 loại Virtual host chính:
 
 ## Cấu hình Virtual Host trong Apache (Cấu hình nhiều website trên 1 webserver)
 
+### Trên Ubuntu
+
 `Bước 1:` Cài đặt Apache (nếu chưa có)
 
 chạy các lệnh sau để cài đặt:
@@ -150,3 +152,141 @@ Trên máy cục bộ:
 - `http://ubuntu2.com`
 
 ![browser ubuntu1](./images/browser_ubuntu1.png)
+
+### Trên ContOS 7
+
+`Bước 1`: Cài đặt Apache (Nếu chưa có)
+
+Câu lệnh cài đặt Apache:
+
+```plaintext
+sudo yum install httpd -y
+```
+
+Khởi động Apache:
+
+```plaintext
+sudo systemctl start httpd
+sudo systemctl enable httpd
+```
+
+- `sudo systemctl start httpd`: Khởi động dịch vụ Apache.
+- `sudo systemctl enable httpd`: Kích hoạt Apache khởi động cùng hệ thống.
+
+Kiểm tra trạng thái Apache:
+
+![centos-apache_running](./images/centos-apache_running.png)
+
+`Bước 2`: Mở cổng tường lửa
+
+Mở cổng 80 (HTTP) để cho phép truy cập:
+
+```plaintext
+sudo firewall-cmd --permanent --add-port=80/tcp
+sudo firewall-cmd --reload
+```
+
+- `permanent`: mở vĩnh viễn.
+
+`Bước 3`: Tạo thư mục cho từng website
+
+Tạo 2 website `site1.com` và `site2.com`:
+
+```plaintext
+sudo mkdir -p /var/www/site1.com/public_html
+sudo mkdir -p /var/www/site2.com/public_html
+```
+
+Cấp quyền cho thư mục:
+
+```plaintext
+sudo chown -R apache:apache /var/www/site1.com/public_html
+sudo chown -R apache:apache /var/www/site2.com/public_html
+sudo chmod -R 755 /var/www
+```
+
+`Bước 4:` Tạo trang `index.html` cho từng website
+
+```plaintext
+echo "<h1>Welcom to Site1.com</h1>" | sudo tee /var/www/site1.com/public_html/index.html
+echo "<h1>Welcom to Site2.com</h1>" | sudo tee /var/www/site2.com/public_html/index.html
+```
+
+- `tee`: dùng để ghi nội dung vào file.
+
+`Bước 5`: Cấu hình VirtualHost
+
+Apache trên CentOS 7 lưu cấu hình trong `/etc/httpd/conf.d/`. Ta sẽ tạo file VirtualHost cho từng website.
+
+**Cấu hình cho site1.com:**
+
+```plaintext
+sudo vi /etc/httpd/conf.d/site1.conf
+```
+
+Nội dung cần thêm:
+
+```plaintext
+<VirtualHost *:80>
+    ServerName site1.com
+    DocumentRoot /var/www/site1.com/public_html
+    <Directory /var/www/site1.com/public_html>
+        AllowOverride All
+        Require all granted
+    </Directory>
+    ErrorLog /var/log/httpd/site1_error.log
+    CustomLog /var/log/httpd/site1_access.log combined
+</VirtualHost>
+```
+
+**Cấu hình cho site2.com:**
+
+```plaintext
+sudo vi /etc/httpd/conf.d/site2.conf
+```
+
+Nội dung cần thêm:
+
+```plaintext
+<VirtualHost *:80>
+    ServerName site2.com
+    DocumentRoot /var/www/site2.com/public_html
+    <Directory /var/www/site2.com/public_html>
+        AllowOverride All
+        Require all granted
+    </Directory>
+    ErrorLog /var/log/httpd/site2_error.log
+    CustomLog /var/log/httpd/site2_access.log combined
+</VirtualHost>
+```
+
+`Bước 6`: Kiểm tra và khởi động lại Apache
+
+Lỗi cú pháp:
+
+```plaintext
+sudo apachectl configtest
+```
+
+- Nếu kết quả là `Syntax OK`, tiếp tục khởi động lại Apache.
+
+```plaintext
+sudo systemctl restart httpd
+```
+
+`Bước 7`: Cấu hình file hosts (Trên máy cục bộ vì truy cập website tại đó)
+
+Trên máy cục bộ:
+
+1. Mở file `C:\Windows\System32\drivers\etc\hosts` trên Notepad với quyền Admin.
+2. Thêm vào cuối file:
+
+    ```plaintext
+    192.168.133.130 site1.com
+    192.168.133.130 site2.com
+    ```
+
+`Bước 8`: Truy cập trên trình duyệt
+
+- `http://site1.com`
+- `http://site2.com`
