@@ -14,7 +14,7 @@ HTTP (HyperText Transfer Protocol) là giao thức truyền tải siêu văn b�
 
 ### 2. Các thành phần chính của HTTP
 
-![http component](../images/http_component.png)
+![http component](../images/http_message.png)
 
 - **Máy khách (Client):**
   - Thường là trình duyệt web (ví dụ: Brave, Chrome).
@@ -40,7 +40,7 @@ HTTP (HyperText Transfer Protocol) là giao thức truyền tải siêu văn b�
 http://example.com:80/path/to/page?query=value#section
 ```
   
-- *http:* Giao thức sử dụng (HTTP hoặc HTTPS).
+- *http:* Giao thức sử dụng.
 - *example.com:* Tên miền (hostname) của máy chủ.
 - *80:* Cổng giao tiếp (HTTP sử dụng cổng mặc định là 80, HTTPS dùng 443).
 - */path/to/page:* Đường dẫn tài nguyên.

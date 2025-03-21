@@ -1,10 +1,10 @@
 # Cài đặt, sử dụng VMware
 
-## Phân biệt 3 chế độ network trong VMware: NAT, Bridge, Host-only
+## Phân biệt 3 chế độ network trong VMware: NAT, Bridged, Host-only
 
 ### So sánh nhanh
 
-| Tính năng | NAT | Bridge | Host-Only |
+| Tính năng | NAT | Bridged | Host-Only |
 |-----------|-------------|---------|---------|
 | Kết nối Internet | Có (thông qua máy chủ host) | Có (nếu host có mạng) | Không (trừ khi cấu hình thêm) |
 | Giao tiếp với máy host | Có | Có | Có |
@@ -31,9 +31,9 @@ Máy ảo được cấu hình NAT sẽ sử dụng IP của máy thật để g
   - Máy ảo <-> Mạng LAN bên ngoài: Không thể truy cập trực tiếp
 - **Ứng dụng:** Phù hợp khi cần truy cập internet từ VM mà không muốn VM hiển thị trực tiếp trên mạng LAN.
 
-**2. Bridge:**
+**2. Bridged:**
 
-![bridge](../images/bridge.png)
+![bridged](../images/bridge.png)
 
 Card mạng của máy ảo sẽ được gắn trực tiếp với card mạng của máy thật (sử dụng switch ảo VMnet0). Lúc này, máy ảo sẽ đóng vai trò như một máy trong mạng thật, có thể nhận DHCP từ mạng ngoài, hoặc đặt IP tĩnh cùng dải với mạng ngoài để giao tiếp với các máy ngoài mạng hoặc lên Internet.
 
@@ -43,7 +43,7 @@ Card mạng của máy ảo sẽ được gắn trực tiếp với card mạng 
 - **Khả năng giao tiếp:**
   - Máy ảo <-> Internet: **Có**
   - Máy ảo <-> Máy chủ (host): **Có**
-  - Máy ảo <-> Máy ảo (cùng Bridge): **Có**
+  - Máy ảo <-> Máy ảo (cùng Bridged): **Có**
   - Máy ảo <-> Mạng LAN bên ngoài: **Có**
 - **Ứng dụng:** Phù hợp khi cần kiểm tra, cấu hình hệ thống mạng thực hoặc cần máy ảo xuất hiện như một thiết bị độc lập trên mạng.
 
@@ -184,9 +184,9 @@ Kết quả ping thành công:
 
 ![ping to centos](../images/ping_to_centos.png)
 
-## Sử dụng 1 card Bridge để từ máy ảo ping ra máy laptop cá nhân
+## Sử dụng 1 card Bridged để từ máy ảo ping ra máy laptop cá nhân
 
-### `Bước 1:` Cài đặt card mạng ở chế độ Bridge
+### `Bước 1:` Cài đặt card mạng ở chế độ Bridged
 
 1. Tắt máy ảo (Nếu đang chạy).
 2. Chọn máy ảo (CentOS 7 hoặc Ubuntu Server) → Edit virtual machine settings.
