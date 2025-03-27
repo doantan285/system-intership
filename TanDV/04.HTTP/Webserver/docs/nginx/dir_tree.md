@@ -9,7 +9,7 @@
 | `/etc/nginx/conf.d/default.conf` | File VirtualHost mặc định của Nginx, có thể sửa hoặc tạo file mới trong thư mục `conf.d/`. |
 | `/usr/share/nginx/html/` | Thư mục gốc chứa file website mặc định (tương tự /var/www/html/ trên Apache). |
 | `/var/log/nginx/access.log` | File log ghi lại mọi request truy cập vào server. |
-| `/var/log/nginx/error.log` | 	File log ghi lại lỗi của Nginx. |
+| `/var/log/nginx/error.log` | File log ghi lại lỗi của Nginx. |
 | `/usr/lib/systemd/system/nginx.service` | File quản lý dịch vụ Nginx khi dùng `systemctl`. |
 | `/etc/nginx/modules/` | Thư mục chứa các module Nginx. |
 

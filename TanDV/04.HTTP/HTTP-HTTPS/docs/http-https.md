@@ -224,7 +224,7 @@ Server Hello:
 
 `Bước 3`: **Xác thực chứng chỉ SSL/TLS**
 
-Trình duyệt kiểm tra tính hợp lệ của chứng chỉ số được gửi từ máy chủ:
+Khi nhận được tin "server hello" từ server, client sẽ lấy SSL certificate trong tin nhắn đó và gửi yêu cầu tới CA (là nơi cấp SSL certificate cho server) để xác thực xem mình có đang nhận tin từ chính chủ hay không:
 
 - **Tính hợp pháp:** Chứng chỉ được cấp bởi tổ chức chứng thực đáng tin cậy (CA – Certificate Authority).
 - **Hạn sử dụng:** Chứng chỉ có còn hợp lệ không (thời gian bắt đầu và kết thúc).

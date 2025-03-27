@@ -15,21 +15,36 @@
 
 ### Chi tiết từng chế độ
 
+Khi tạo các VMnet, trên máy thật sẽ tạo ra các card mạng ảo tương ứng với VMnet đó, dùng để kết nối Virtual Switch với máy tính thật, giúp máy ảo và máy thật có thể liên lạc được với nhau.
+
+Riêng VMnet0 kết nối trực tiếp với card mạng vật lý thông qua cơ chế bắc cầu (bridged) nên không tạo ra card VMnet. VMnet8 mặc định sẽ sử dụng cơ chế NAT. Các VMnet khác khi thêm vào sẽ là Host-Only.
+
 **1. NAT (Network Address Translation):**
 
 ![nat](../images/nat.png)
 
 Máy ảo được cấu hình NAT sẽ sử dụng IP của máy thật để giao tiếp với mạng ngoài. Các máy ảo được cấp địa chỉ IP nhờ một DHCP ảo của VMware. Lúc này, các máy ảo sẽ kết nối với máy thật qua switch ảo VMnet8, và máy thật sẽ đóng vai trò NAT server cho các máy ảo.
 
-- **Cách hoạt động:** Máy ảo (VM) sử dụng địa chỉ IP nội bộ do VMware cung cấp, chia sẻ kết nối mạng với máy chủ vật lý (host) thông qua cơ chế NAT.
-- **IP của VM:** Do VMware DHCP cấp, thuộc dải riêng biệt (ví dụ: 192.168.x.x).
-- **Truy cập internet:** Có thể truy cập internet qua máy host.
-- **Khả năng giao tiếp:**
-  - Máy ảo <-> Internet: **Có**
-  - Máy ảo <-> Máy chủ (host): **Có**
-  - Máy ảo <-> Máy ảo (cùng NAT): **Có**
-  - Máy ảo <-> Mạng LAN bên ngoài: Không thể truy cập trực tiếp
-- **Ứng dụng:** Phù hợp khi cần truy cập internet từ VM mà không muốn VM hiển thị trực tiếp trên mạng LAN.
+**Cách hoạt động:**
+
+1. **Máy ảo (VM) gửi yêu cầu truy cập mạng:** Khi máy ảo muốn truy cập một địa chỉ trên mạng (ví dụ: một trang web), nó sẽ gửi một gói tin đi. Gói tin này sẽ có địa chỉ IP nguồn là địa chỉ IP riêng (private IP) của máy ảo.
+2. **Máy thật (Host) thực hiện NAT lần 1:** Máy thật đóng vai trò là NAT device cho máy ảo. Khi gói tin từ máy ảo đến, máy thật sẽ thực hiện các bước sau:
+    - Thay đổi địa chỉ IP nguồn trong gói tin từ địa chỉ IP riêng của máy ảo thành địa chỉ IP riêng của chính máy thật
+    - Ghi lại thông tin về kết nối này (địa chỉ IP và port của máy ảo, địa chỉ IP và port mới của máy thật) vào bảng NAT của nó. Thông tin này sẽ được dùng để theo dõi các phản hồi sau này.
+3. **Router thực hiện NAT lần 2:** Gói tin sau khi đã được NAT bởi máy thật sẽ tiếp tục được gửi đến router. Router, là thiết bị kết nối mạng nội bộ với internet, sẽ thực hiện NAT lần thứ hai:
+    - Thay đổi địa chỉ IP nguồn trong gói tin từ địa chỉ IP riêng của máy thật thành địa chỉ IP công cộng (public IP) được cấp bởi nhà cung cấp dịch vụ internet (ISP).
+    - Tương tự, router cũng sẽ ghi lại thông tin về kết nối này vào bảng NAT của nó (địa chỉ IP và port của máy thật, địa chỉ IP và port mới sau khi NAT ra IP public).
+4. **Phản hồi từ internet:** Khi máy chủ web hoặc dịch vụ mà máy ảo đang cố gắng truy cập gửi phản hồi, gói tin sẽ có địa chỉ IP đích là địa chỉ IP công cộng của router.
+5. **Router chuyển phản hồi về máy thật:** Router sẽ xem xét bảng NAT của nó và xác định rằng gói tin này là phản hồi cho một kết nối đã được khởi tạo từ địa chỉ IP riêng của máy thật. Do đó, router sẽ thay đổi địa chỉ IP đích trong gói tin từ địa chỉ IP công cộng trở lại địa chỉ IP riêng của máy thật và gửi gói tin này về máy thật.
+6. **Máy thật chuyển phản hồi về máy ảo:** Khi máy thật nhận được gói tin phản hồi, nó sẽ xem xét bảng NAT của mình và xác định rằng gói tin này là phản hồi cho một kết nối đã được khởi tạo từ địa chỉ IP riêng của máy ảo. Do đó, máy thật sẽ thay đổi địa chỉ IP đích trong gói tin từ địa chỉ IP riêng của chính nó trở lại địa chỉ IP riêng của máy ảo và gửi gói tin này đến máy ảo.
+
+**Khả năng giao tiếp:**
+
+- Máy ảo -> Internet: **Có**
+- Máy ảo <- Internet: cần cấu hình Port Forwarding
+- Máy ảo <-> Máy chủ (host): **Có**
+- Máy ảo <-> Máy ảo (cùng NAT): có thể bị hạn chế và cần cấu hình
+- Máy ảo <-> Mạng LAN bên ngoài: Không thể truy cập trực tiếp
 
 **2. Bridged:**
 
@@ -37,15 +52,22 @@ Máy ảo được cấu hình NAT sẽ sử dụng IP của máy thật để g
 
 Card mạng của máy ảo sẽ được gắn trực tiếp với card mạng của máy thật (sử dụng switch ảo VMnet0). Lúc này, máy ảo sẽ đóng vai trò như một máy trong mạng thật, có thể nhận DHCP từ mạng ngoài, hoặc đặt IP tĩnh cùng dải với mạng ngoài để giao tiếp với các máy ngoài mạng hoặc lên Internet.
 
-- **Cách hoạt động:** Máy ảo kết nối trực tiếp với mạng vật lý (giống như một máy tính độc lập trong mạng LAN).
-- **IP của VM:** Do router/modem mạng LAN cấp (giống máy thật).
-- **Truy cập internet:** Có, thông qua mạng LAN giống như máy host.
-- **Khả năng giao tiếp:**
-  - Máy ảo <-> Internet: **Có**
-  - Máy ảo <-> Máy chủ (host): **Có**
-  - Máy ảo <-> Máy ảo (cùng Bridged): **Có**
-  - Máy ảo <-> Mạng LAN bên ngoài: **Có**
-- **Ứng dụng:** Phù hợp khi cần kiểm tra, cấu hình hệ thống mạng thực hoặc cần máy ảo xuất hiện như một thiết bị độc lập trên mạng.
+**Cách hoạt động:**
+
+1. Máy ảo kết nối trực tiếp vào mạng LAN thông qua card mạng vật lý của máy host.
+    - VMware tạo một Virtual Bridge (cầu nối ảo) giữa adapter Ethernet/Wi-Fi của máy host và VMnet0 (cầu nối ảo).
+    - Máy ảo hoạt động như một thiết bị độc lập trong mạng LAN, giống như một máy tính thật.
+    - Máy ảo có thể lấy IP từ DHCP trong mạng LAN, giống như máy host và các thiết bị khác trong mạng.
+2. Luồng dữ liệu khi máy ảo giao tiếp với mạng:
+    - Khi máy ảo gửi gói tin, nó đi qua Virtual Ethernet Adapter → VMnet0 → card mạng vật lý của máy host → mạng LAN.
+    - Khi máy ảo nhận gói tin, dữ liệu từ mạng LAN đi vào card mạng vật lý của máy host → VMnet0 → máy ảo.
+
+**Khả năng giao tiếp:**
+
+- Máy ảo <-> Internet: **Có**
+- Máy ảo <-> Máy chủ (host): **Có**
+- Máy ảo <-> Máy ảo (cùng Bridged): **Có**
+- Máy ảo <-> Mạng LAN bên ngoài: **Có**
 
 **3. Host-only:**
 
@@ -53,15 +75,24 @@ Card mạng của máy ảo sẽ được gắn trực tiếp với card mạng 
 
 Khi cấu hình máy ảo sử dụng host-only networking, máy ảo sẽ được kết nối với máy thật trong một mạng riêng thông qua Switch ảo VMnet1. Địa chỉ của máy ảo và máy thật trong mạng host-only có thể được cấp bởi DHCP ảo gắn liền với Switch ảo Vmnet1 hoặc có thể đặt địa chỉ IP tĩnh cùng dải để kết nối với nhau.
 
-- **Cách hoạt động:** Máy ảo chỉ có thể kết nối với máy chủ (host) và các máy ảo khác trong cùng chế độ này.
-- **IP của VM:**  Do VMware DHCP cấp, thuộc mạng riêng biệt không liên quan đến mạng LAN.
-- **Truy cập internet:** Không.
-- **Khả năng giao tiếp:**
-  - Máy ảo <-> Internet: **Không**
-  - Máy ảo <-> Máy chủ (host): **Có**
-  - Máy ảo <-> Máy ảo (cùng Host-Only): **Có**
-  - Máy ảo <-> Mạng LAN bên ngoài: **Không**
-- **Ứng dụng:** Phù hợp khi cần kiểm tra, cấu hình hệ thống mạng thực hoặc cần máy ảo xuất hiện như một thiết bị độc lập trên mạng.
+**Lấy IP tự động từ DHCP:**
+
+**Cách hoạt động:**
+
+1. VMware tạo một mạng ảo riêng biệt (VMnet1)
+    - VMnet1 là một mạng nội bộ chỉ có giữa máy host và các máy ảo host-only.
+    - Máy host có một Host Virtual Adapter để giao tiếp với mạng VMnet1.
+    - Không có kết nối với card mạng vật lý của máy host, nên máy ảo không thể ra Internet hoặc truy cập mạng LAN bên ngoài.
+2. Luồng dữ liệu khi máy ảo giao tiếp:
+    - Khi máy ảo gửi gói tin, nó đi qua Virtual Ethernet Adapter → VMnet1 → máy host hoặc máy ảo khác trong cùng VMnet1.
+    - Nếu máy host chạy một dịch vụ (VD: SSH, HTTP), máy ảo có thể kết nối đến dịch vụ đó thông qua IP của Host Virtual Adapter.
+
+**Khả năng giao tiếp:**
+
+- Máy ảo <-> Internet: **Không**
+- Máy ảo <-> Máy chủ (host): **Có** (tắt tường lửa ở máy chủ)
+- Máy ảo <-> Máy ảo (cùng Host-Only): **Có**
+- Máy ảo <-> Mạng LAN bên ngoài: **Không**
 
 ## Sử dụng chế độ mạng NAT để truy cập Internet
 
