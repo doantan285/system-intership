@@ -19,76 +19,66 @@ SSH là một giao thức bảo mật phổ biến trong lĩnh vực CNTT. Nhờ
 - **SCP & SFTP:**
   - `scp` (Secure Copy): Truyền tệp tin giữa client và server an toàn.
   - `sftp` (SSH File Transfer Protocol): Giao thức truyền tệp an toàn dựa trên SSH.
+  - vd: truyền file từ ubuntu sang centos:
+  
+    ```plaintext
+    scp text.txt doantan1@192.168.3.88:/home/doantan1/
+    hoặc chỉ cho kết nối với keypair
+    scp -i ~/.ssh/id_rsa text.txt doantan1@192.168.8.88:/home/doantan1/
+    ```
+
 - **Chạy lệnh từ xa:** Có thể thực thi lệnh trên máy chủ mà không cần mở phiên shell (`ssh user@server "ls -l"`).
 
 ## Cách hoạt động của SSH
 
-![How does SSH work?](./images/ssh_working.webp)
+![ssh working](./images/ssh_work.png)
 
-`Bước 1`: Thiết lập kết nối TCP
+### Giai đoạn 1 - TCP handshake
 
-- Máy khách (SSH Client) mở kết nối TCP đến máy chủ (SSH Server), thông thường qua cổng 22 (hoặc cổng tùy chỉnh).
+- Client khởi tạo kết nối TCP đến server qua cổng mặc định 22 (hoặc cổng tùy chỉnh).
+- Server lắng nghe trên cổng 22 và phản hồi bằng một gói tin SYN-ACK để chấp nhận yêu cầu kết nối.
+- Client gửi lại một gói tin ACK để hoàn tất quá trình bắt tay ba bước (three-way handshake) của TCP. Lúc này, một kết nối TCP đã được thiết lập giữa client và server.
 
-`Bước 2`: Đàm phán phiên bản SSH
+### Giai đoạn 2 - Protocol Version Exchange
 
-- Máy khách và máy chủ trao đổi thông tin về phiên bản SSH đang sử dụng.
-- Nếu phiên bản không tương thích, kết nối sẽ bị từ chối.
+- Sau khi kết nối TCP được thiết lập, client và server bắt đầu thương lượng về phiên bản giao thức SSH mà họ sẽ sử dụng và các thuật toán mã hóa, xác thực được hỗ trợ, ví dụ:
 
-`Bước 3`: Đàm phán thuật toán mã hóa
+```plaintext
+SSH-2.0-OpenSSH_9.3p1 Ubuntu-1
+```
 
-- Máy khách và máy chủ thương lượng và thống nhất về các thuật toán mã hóa (vd: AES, RSA, ECDSA), xác thực và trao đổi khóa sẽ được sử dụng trong phiên làm việc. Điều này đảm bảo rằng cả hai bên đều có thể giao tiếp một cách an toàn.
+### Giai đoạn 3 - Key Exchange
 
-`Bước 4`: Tạo cặp khóa SSH (nếu dùng xác thực bằng khóa công khai)
+- Mục tiêu của giai đoạn này là tạo ra **Session key**. Quá trình này thường sử dụng các thuật toán trao đổi khóa như Diffie-Hellman (DH) hoặc Elliptic Curve Diffie-Hellman (ECDH).
+- Các bước cơ bản (ví dụ sử dụng Diffie-Hellman (DH)):
+  - Cả hai bên chọn một cặp số chung: `g` (generator), `p` (số nguyên tố lớn).
+  - Mỗi bên chọn một số bí mật: client chọn `a`, server chọn `b`.
+  - Tính public value: Client tính `A = g^a mod p`, Server tính `B = g^b mod p`.
+  - Client gửi `A` cho server, và server gửi `B` cho client.
+  - Client tính `K = B^a mod p`; Server tính `K = A^b mod p`.
+  - **Session key** = K + random + session ID.
+- Ví dụ:
+  - Giả sử `g = 5`, `p = 23`
+  - Client chọn `a = 6` → `A = 5^6 mod 23 = 8`
+  - Server chọn `b = 15` → `B = 5^15 mod 23 = 2`
+  - Client nhận `B = 2` → tính `K = 2^6 mod 23 = 18`
+  - Server nhận `A = 8` → tính `K = 8^15 mod 23 = 18`
+  - Kết quả: cùng shared secret `K = 18` mà không cần gửi a hoặc b
 
-- Máy khách có thể tạo một cặp khóa gồm khóa công khai (public key) và khóa riêng tư (private key).
+### Giai đoạn 4 - User Authentication
 
-`Bước 5`: Gửi khóa công khai lên máy chủ
+![ssh key authentication](./images/ssh_key_auth.png)
 
-- Máy khách gửi khóa công khai để xác thực (nếu đã thiết lập xác thực bằng SSH key).
+- Để đảm bảo rằng client đang kết nối đúng đến server mong muốn và không phải là một kẻ tấn công trung gian (man-in-the-middle attack), client cần xác minh danh tính của server.
+- Client tạo keypair (gồm public key và private key) và gửi public key cho server.
 
-`Bước 6`: Gửi yêu cầu đăng nhập
+  ```plaintext
+  ssh-copy-id -i ~/.ssh/id_rsa.pub doantan1@192.168.3.73
+  ```
 
-- Máy khách gửi yêu cầu đăng nhập bằng phương thức xác thực (mật khẩu hoặc khóa công khai).
-
-`Bước 7`: Máy chủ kiểm tra khóa công khai
-
-- Nếu dùng khóa công khai, máy chủ kiểm tra xem khóa công khai có nằm trong danh sách `~/.ssh/authorized_keys` hay không.
-- Nếu có, máy chủ sẽ tạo một số ngẫu nhiên và mã hóa nó bằng chính khóa công khai mà máy khách đã gửi.
-
-`Bước 8`: Máy chủ gửi số ngẫu nhiên đã mã hóa về máy khách
-
-- Đây là một thử nghiệm xác thực: máy chủ gửi một số ngẫu nhiên đã mã hóa bằng khóa công khai của máy khách.
-
-`Bước 9`: Máy khách giải mã dữ liệu bằng khóa riêng tư
-
-- Nếu máy khách sử dụng khóa riêng tư của mình (được tạo ở bước 4) để giải mã số ngẫu nhiên đã nhận từ máy chủ.
-
-`Bước 10`: Máy khách gửi lại dữ liệu đã giải mã
-
-- Máy khách gửi số ngẫu nhiên đã giải mã lại cho máy chủ.
-
-`Bước 11`: Máy chủ xác thực thông tin giải mã
-
-- Máy chủ kiểm tra xem số ngẫu nhiên đã giải mã có chính xác không.
-- Nếu chúng khớp nhau, điều này chứng minh rằng máy khách sở hữu khóa riêng tư tương ứng với khóa công khai đã được gửi, và do đó máy khách được xác thực. Nếu sai, kết nối bị từ chối.
-
-`Bước 12`: Yêu cầu và phản hồi phiên làm việc
-
-- Sau khi xác thực thành công, máy khách và máy chủ thiết lập một phiên làm việc SSH an toàn và mã hóa.
-- Cả hai bên sử dụng số ngẫu nhiên được mã hóa và giải mã bằng key pair này để tạo ra session key bằng cách áp dụng thuật toán Diffie-Hellman hoặc ECDH.
-
-`Bước 13`: Máy khách gửi lệnh được mã hóa
-
-- Người dùng có thể nhập lệnh, dữ liệu được mã hóa bằng **session key** được thiết lập trong quá trình thương lượng thuật toán (bước 3) và gửi đến máy chủ.
-
-`Bước 14`: Máy chủ giải mã lệnh bằng khóa phiên
-
-- Máy chủ sử dụng khóa phiên (session key) đã thỏa thuận từ trước để giải mã dữ liệu.
-
-`Bước 15`: Máy chủ gửi kết quả được mã hóa
-
-- Sau khi thực thi lệnh, máy chủ gửi kết quả trở lại máy khách, và kết quả này cũng được mã hóa bằng session key.
-
-`Bước 16`: Máy khách giải mã kết quả bằng khóa phiên
-
-- Máy khách nhận và giải mã kết quả, hiển thị lên terminal.
+- public key được lưu trong tệp `~/.ssh/authorized_keys` của server
+- Xác thực bằng keypair:
+  - Server gửi một chuỗi thử thách (challenge) – có thể là số ngẫu nhiên, session ID, hoặc 1 message do server chọn.
+  - Client ký số chuỗi đó bằng private key của mình.
+  - Server dùng public key (client đã đăng ký trước) để kiểm tra chữ ký.
+  - Nếu chữ ký hợp lệ → xác thực thành công
