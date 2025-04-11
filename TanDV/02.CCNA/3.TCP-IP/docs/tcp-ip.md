@@ -178,7 +178,7 @@
 **Đảm bảo dữ liệu:**
 
 - Cơ chế xác nhận (ACK): Mỗi gói tin sẽ nhận từ thiết bị nhận.
-- Tự động phát hiện và gửi lại gói tin nêys phát hiện mất dữ liệu.
+- Tự động phát hiện và gửi lại gói tin nếu phát hiện mất dữ liệu.
 
 **Ứng dụng:** sử dụng trong các tình huống cần truyền tải chính xác dữ liệu, chẳng hạn: tải file, duyệt web, gửi email.
 

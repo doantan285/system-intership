@@ -82,3 +82,7 @@ SSH-2.0-OpenSSH_9.3p1 Ubuntu-1
   - Client ký số chuỗi đó bằng private key của mình.
   - Server dùng public key (client đã đăng ký trước) để kiểm tra chữ ký.
   - Nếu chữ ký hợp lệ → xác thực thành công
+
+### Giai đoạn 5 - Request Services (Sau xác thực)
+
+Sau khi xác thực thành công, client có thể yêu cầu dịch vụ.

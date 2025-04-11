@@ -105,7 +105,7 @@ Ghi log SSH vào `/var/log/auth.log`:
 - `SyslogFacility AUTH`: Cho biết AUTH là facility được định nghĩa trong syslog, thường được sử dụng cho các thông điệp liên quan đến bảo mật và ủy quyền (authorization).
 - `LogLevel INFO`:INFO là mức độ chi tiết của thông điệp nhật ký và SSH server ghi lại. Các thông tin cơ bản sẽ được lưu.
 
-## Cấu hình SSH Client (`~/.ssh/config` hoặc `/etc/ssh/ssh_config`)
+## Cấu hình SSH Client (`~/.ssh/config`)
 
 File này giúp cấu hình SSH Client trên máy khách để kết nối nhanh hơn.
 
