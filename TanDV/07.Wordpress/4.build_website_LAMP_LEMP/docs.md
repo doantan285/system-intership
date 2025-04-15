@@ -2,7 +2,7 @@
 
 ## Mục tiêu
 
-Dựng 1 website wordpress chạy trong máy ảo ubuntu sử dụng LAMP (Linux + Apache + MySQL + PHP).
+Dựng 2 website wordpress chạy trong máy ảo ubuntu sử dụng LAMP (Linux + Apache + MySQL + PHP) và LEMP (Linux + Nginx + MySQL + PHP).
 
 ## Các bước triển khai
 

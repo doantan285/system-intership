@@ -57,6 +57,20 @@ Với **Wordpress.com**, người dùng không có quyền cài giao diện từ
 - Không cài được plugin/theme tùy chỉnh nếu không nâng cấp.
 - Không có toàn quyền kiểm soát.
 
+**Ví dụ:**
+
+Truy cập vào trang wordpress.com và thực hiện login, sẽ có giao diện dashboard:
+
+![wordpress.com dashboard](./images/wp_com_dashboard.png)
+
+Sau khi hoàn thành bước này và thực hiện một số cài đặt nhỏ như tên website, bài post,... người khác có thể truy cập website của người dùng với địa chỉ:
+
+![wordpress.com website](./images/wp_com_url.png)
+
+Kết quả sau khi truy cập <https://coffeepointdotcom.wordpress.com/>:
+
+![wordpress.com website UI](./images/wp_com_ui.png)
+
 ### 3. So sánh chi tiết: WordPress.org và WordPress.com
 
 | Tiêu chí | WordPress.org (Self-hosted) | WordPress.com (Hosted) |
