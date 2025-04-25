@@ -47,7 +47,7 @@ sudo mysql_secure_installation
 ```
 
 - `mysql-server`: gói phần mềm chứa các tệp tin cần thiết để chạy máy chủ MySQL.
-- `mysql_secure_installation`: một script (tập lệnh) được cung cấp bởi các nhà phát triển MySQL. Mục đích của script này là để giúp bạn tăng cường bảo mật cho một máy chủ MySQL mới được cài đặt.
+- `mysql_secure_installation`: một script (tập lệnh) được cung cấp bởi các nhà phát triển MySQL. Mục đích của script này là để giúp tăng cường bảo mật cho một máy chủ MySQL mới được cài đặt.
 
 Tạo user và database cho wordpress:
 

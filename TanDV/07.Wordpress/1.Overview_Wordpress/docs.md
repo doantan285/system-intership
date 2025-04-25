@@ -95,7 +95,7 @@ Kết quả sau khi truy cập <https://coffeepointdotcom.wordpress.com/>:
 - **Giao diện (Themes):** Giao diện quyết định hình thức bên ngoài và cách hiển thị nội dung của website người dùng. Có hàng ngàn giao diện miễn phí và trả phí có sẵn, cho phép người dùng dễ dàng thay đổi diện mạo website mà không cần kiến thức lập trình sâu.
 ![Theme WordPress](./images/wp_theme.png)
 
-- **Plugin:** là các đoạn mã mở rộng chức năng của WordPress. Chúng cho phép thêm các tính năng mới vào website của, chẳng hạn như tạo biểu mẫu liên hệ, tối ưu hóa SEO, tích hợp mạng xã hội, tạo cửa hàng trực tuyến, v.v. Cũng có vô số plugin miễn phí và trả phí để lựa chọn.
+- **Plugin:** là các đoạn mã mở rộng chức năng của WordPress. Chúng cho phép thêm các tính năng mới vào website, chẳng hạn như tạo biểu mẫu liên hệ, tối ưu hóa SEO, tích hợp mạng xã hội, tạo cửa hàng trực tuyến, v.v. Cũng có vô số plugin miễn phí và trả phí để lựa chọn.
 ![Plugin WordPress](./images/wp_plugin.png)
 
 - **Bài viết (Posts):** nơi tạo và quản lý các nội dung theo dạng blog, thường được sắp xếp theo thời gian và có thể gắn thẻ (tags) và danh mục (categories).
