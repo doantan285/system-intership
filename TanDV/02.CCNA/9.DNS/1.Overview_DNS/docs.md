@@ -6,9 +6,9 @@
 
 ### 1. Khái niệm DNS
 
-**DNS - Domain Name System** là một hệ thống quan trọng giúp chuyển đổi tên miền sang địa chỉ IP, giúp các thiết bị có thể giao tiếp và kết nối với nhau trên internet.
+**DNS - Domain Name System** là một hệ thống quan trọng chuyển đổi tên miền sang địa chỉ IP, giúp các thiết bị có thể giao tiếp và kết nối với nhau trên internet.
 
-**DNS** về căn bản là một hệ thống giúp cho việc chuyển đổi các tên miền mà con người dễ ghi nhớ (dạng ký tự, ví dụ: `www.example.com`) sang địa chỉ IP vật lý (dạng số, ví dụ `123.11.5.19`) tương ứng của tên miền đó.
+**DNS** về căn bản là một hệ thống chuyển đổi các tên miền mà con người dễ ghi nhớ (dạng ký tự, ví dụ: `www.example.com`) sang địa chỉ IP vật lý (dạng số, ví dụ `123.11.5.19`) tương ứng của tên miền đó.
 
 ### 2. Chức năng của DNS
 
@@ -176,7 +176,7 @@ _sip._tcp.example.com   IN  SRV  10  60  5060  sipserver.example.com.
 Recursive DNS sẽ thực hiện các bước sau nếu không có cache:
 
 1. **Hỏi Root DNS Server:**
-    - Hỏi: “IP của `www.example.com` lầ gì?”.
+    - Hỏi: “IP của `www.example.com` là gì?”.
     - Root DNS: “Hãy hỏi `.com` TLD Server”.
 2. **Hỏi TLD DNS Server (.com):**
     - Hỏi: “IP của `www.example.com` là gì?”.

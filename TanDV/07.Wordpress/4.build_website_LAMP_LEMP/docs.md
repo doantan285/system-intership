@@ -124,7 +124,7 @@ wget https://wordpress.org/latest.tar.gz
 tar -xzvf latest.tar.gz
 
 # copy toàn bộ nội dung trong wordpress vào /html
-sudp cp -r wordpress/* /var/www/html/
+sudo cp -r wordpress/* /var/www/html/
 ```
 
 - `tar -xzvf latest.tar.gz`: sau khi thực hiện, một thư mục có tên là `wordpress` sẽ được tạo ra trong thư mục `/tmp`, chứa các tệp tin của WordPress.

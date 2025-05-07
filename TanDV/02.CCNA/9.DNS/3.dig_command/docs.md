@@ -27,7 +27,7 @@
 
 ## Cài đặt `dig` trên Linux
 
-**CentOS:**
+### 1. Trên CentOS
 
 ```cmd
 sudo dnf install bind-utils -y
@@ -37,7 +37,7 @@ Kiểm tra kết quả cài đặt với lệnh `dig -v`:
 
 ![dì version on centos](./images/centos-dig_version.png)
 
-**Ubuntu:**
+### 2. Trên Ubuntu
 
 ```cmd
 sudo apt install dnsutils -y
