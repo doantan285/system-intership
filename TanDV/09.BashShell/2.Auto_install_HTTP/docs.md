@@ -62,5 +62,5 @@ echo "Accessing Apache at: http://$ip_address"
 
 ```bash
 chmod +x install_http.sh
-sudo install_http.sh
+sudo ./install_http.sh
 ```

@@ -15,7 +15,9 @@ curl -s "https://api.telegram.org/bot<YOUR_BOT_TOKEN>/getUpdates"
 - Gửi tin nhắn cho bot trước để nó có dữ liệu.
 - Trong kết quả JSON, tìm dòng `"chat":{"id":<YOUR_CHAT_ID>`, đó là chat_id.
 
-![bot ID](./images/botid.png)
+![chat ID](./images/chat_id.png)
+
+- `YOUR_CHAT_ID`: 6438778282
 
 ## 3. Script Bash: Gửi "Hello world!!!"
 

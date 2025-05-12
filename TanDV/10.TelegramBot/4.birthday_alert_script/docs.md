@@ -38,10 +38,10 @@ while IFS= read -r line; do
   BDAY=$(echo "$line" | awk '{print $NF}')
 
   # If the format is valid and matches today
-  if [[ "$BDAY_DDMM" == "$TODAY" ]]; then
+  if [[ "$BDAY" == "$TODAY" ]]; then
     read -r -d '' MESSAGE <<EOF
     *Birthday Alert!*
-    Today is *$NAME*'s birthday
+    Today is *$NAME*'s birthday ($TODAY)
     EOF
 
     curl -s -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendMessage" \

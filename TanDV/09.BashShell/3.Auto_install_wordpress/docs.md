@@ -32,7 +32,6 @@ echo "Installing MySQL and create database..."
 sudo apt install mysql-server -y
 
 mysql_secure_installation <<EOF
-
 y
 n
 y

@@ -28,11 +28,13 @@ CHAT_ID="6438778282"
 # Alert content
 USER_NAME=$(whoami)
 LOGIN_TIME=$(date "+%Y-%m-%d %H:%M:%S")
+IP=$(who | grep $USER | awk '{print $5}' | tr -d '()' | xargs)
 
 MESSAGE=$(cat <<EOF
 *SSH ALERT*
 User: \`$USER_NAME\`
 Time: \`$LOGIN_TIME\`
+IP: \`$IP\`
 EOF
 )
 
