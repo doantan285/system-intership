@@ -8,7 +8,7 @@
 
 Thích hợp để theo dõi lưu lượng mạng khi upload/download dữ liệu, server web, proxy,...
 
-**Cách cài lệnh top:**
+**Cách cài lệnh nload:**
 
 Trên Ubuntu/Debian:
 
@@ -24,10 +24,19 @@ sudo dnf install nload
 
 ## 2. Cách sử dụng lệnh `nload`
 
+Lệnh:
+
 ```bash
 nload
 ```
 
+Hoặc:
+
+```bash
+nload <interface_name>
+```
+
+Kết quả:
 ![nload command](./images/nload.png)
 
 - Mặc định sẽ giám sát interface mạng chính (như eth0, enp0s3, v.v.)
@@ -40,11 +49,10 @@ Giao diện chia làm 2 phần:
 
 ![Incoming](./images/incoming.png)
 
-- **Current:** Tốc độ hiện tại.
-- **Average:** Tốc độ trung bình.
-- **Total:** Tổng dung lượng đã tải về.
-- **Minimum/Maximum:** Tốc độ tối thiểu/tối đa.
-- **Ttl:** Thời gian đã chạy.
+- **Curr (Current):** Tốc độ truyền dữ liệu hiện tại qua interface mạng mà `nload` đang giám sát.
+- **Avg (Average):** Tốc độ trung bình từ lúc bắt đầu chạy `nload` đến hiện tại.
+- **Minimum/Maximum:** Tốc độ tối thiểu/tối đa từng được ghi nhận.
+- **Ttl (Total):** Tổng dung lượng đã truyền qua interface.
 
 ### Outgoing - Dữ liệu gửi đi (upload)
 

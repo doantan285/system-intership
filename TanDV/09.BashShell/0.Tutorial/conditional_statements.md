@@ -1,6 +1,6 @@
 # Câu lệnh điều kiện
 
-## Câu điều kiện
+##
 
 ### 1. Cấu trúc `if`, `elif`, `else`
 
@@ -25,11 +25,11 @@ echo "Nhập tuổi:"
 read age
 
 if [ $age -lt 18 ]; then
-  echo "Bạn chưa đủ tuổi."
+  echo "Chưa đủ tuổi."
 elif [ $age -lt 65 ]; then
-  echo "Bạn là người trưởng thành."
+  echo "Trưởng thành."
 else
-  echo "Bạn đã nghỉ hưu."
+  echo "Nghỉ hưu."
 fi
 ```
 
@@ -38,7 +38,7 @@ fi
 ### 2. Cấu trúc `Case`
 
 ```bash
-case $biến in
+case $var in
   giá_trị1)
     # lệnh nếu khớp giá trị1
     ;;
@@ -58,17 +58,24 @@ esac
 Ví dụ:
 
 ```bash
-os="Linux"
-case "$os" in
-    "Linux")
-        echo "Hệ điều hành Linux."
-        ;;
-    "Windows")
-        echo "Hệ điều hành Windows."
-        ;;
-    *)
-        echo "Hệ điều hành khác."
-        ;;
+#!/bin/bash
+
+echo "Nhập một lựa chọn (start, stop, restart):"
+read action
+
+case $action in
+  start)
+    echo "Đang khởi động dịch vụ..."
+    ;;
+  stop)
+    echo "Đang dừng dịch vụ..."
+    ;;
+  restart)
+    echo "Đang khởi động lại dịch vụ..."
+    ;;
+  *)
+    echo "Lựa chọn không hợp lệ!"
+    ;;
 esac
 ```
 

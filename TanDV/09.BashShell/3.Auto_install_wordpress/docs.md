@@ -13,8 +13,10 @@
 #!/bin/bash
 
 # Check not root or not using sudo
-if [[ $EUID -ne 0 ]] then
+# [[ $EUID -ne 0 ]] && echo "Please run with sudo" && exit 1
+if [[ $EUID -ne 0 ]]; then
     echo "Please run the script with sudo or root privileges"
+    exit 1
 fi
 
 echo "updating system..."

@@ -48,7 +48,7 @@ ls -l /home/username
 | `gzip` / `gunzip` | Nén/giải nén file `.gz` | `gzip file.txt` |
 | `zip` / `unzip` | Nén/giải nén file `.zip` | `zip archive.zip file1 file2` |
 | `ping` | Kiểm tra kết nối tới host | `ping google.com` |
-| `ifconfig` hoặc `ip addr` | Xem địa chỉ IP | `ip adrr` |
+| `ifconfig` hoặc `ip a` | Xem địa chỉ IP | `ip a` |
 | `curl` | Gửi yêu cầu HTTP | `curl https://example.com` |
 
 ## Bash scripting

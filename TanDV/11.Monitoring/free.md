@@ -6,13 +6,12 @@ Lệnh `free` dùng để:
 
 - Hiển thị thông tin về bộ nhớ: bao gồm RAM và SWAP.
 - Giúp kiểm tra mức độ sử dụng, còn trống, và cache.
-- Là công cụ quan trọng để giám sát hiệi suất hệ thống trong thời gian thực.
+- Là công cụ quan trọng để giám sát hiệu suất hệ thống trong thời gian thực.
 
 Lệnh `free` hữu ích để:
 
 - Kiểm tra hệ thống có thiếu RAM không.
 - Phát hiện hệ thống dùng nhiều SWAP (dấu hiệu quá tải bộ nhớ).
-- Phát hiện hệ thông sdungf nhiều SWAP
 
 ## 2. Cách sử dụng lệnh `free`
 
@@ -87,7 +86,7 @@ free -h -t
 
 ![free -h -t](./images/free-total.png)
 
-### 6. Buff/Cache và Available
+## 6. Buff/Cache và Available
 
 **`buff/cache`:** RAM được linux dùng để tăng hiệu suất hệ thống (bằng cách cache file và buffer I/O). Tuy nhiên, nó có thể được giải phóng nếu ứng dụng cần RAM.
 

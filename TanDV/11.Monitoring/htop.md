@@ -2,7 +2,7 @@
 
 ## 1. Lệnh `htop` là gì? Dùng để làm gì?
 
-htop là công cụ giám sát hệ thống nâng cao so với htop, cung cấp giao diện tương tác, màu sắc và dễ sử dụng hơn. Cho phép:
+htop là công cụ giám sát hệ thống nâng cao so với top, cung cấp giao diện tương tác, màu sắc và dễ sử dụng hơn. Cho phép:
 
 - Giám sát CPU, RAM, swap, tiến trình.
 - Sắp xếp/sort theo cột bằng phím tắt.
@@ -44,7 +44,7 @@ htop
 
 **CPU Usage (0[ ], 1[ ]):**
 
-- Hiển thị mức sử dụng CPU của từng core (0, 1, 2, 3...). Hiện tại có 2 core/
+- Hiển thị mức sử dụng CPU của từng core (0, 1, 2, 3...). Hiện tại có 2 core.
 - Mỗi thanh thể hiện:
   - Màu đỏ: %CPU dừng bởi user (ứng dụng).
   - Màu xanh lam: phần kernel (system).

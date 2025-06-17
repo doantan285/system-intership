@@ -25,7 +25,7 @@ Bot API hoạt động thông qua các HTTP request (gửi đến địa chỉ `
 ## Cách hoạt động
 
 - Người dùng gửi tin nhắn, lệnh, hoặc nhấp vào nút tương tác với bot thông qua ứng dụng Telegram.
-- Tin nhắn được Telegram gửi đến server bot (qua webhook hoặc long polling)
+- Tin nhắn được Telegram gửi đến server bot (qua webhooks hoặc long polling)
   - **Long Polling:** Bot liên tục gửi yêu cầu đến máy chủ Telegram để hỏi xem có cập nhật mới nào không. Nếu có, máy chủ sẽ trả về các cập nhật đó.
   - **Webhooks:** Người tạo bot cung cấp một địa chỉ URL (webhook) cho Telegram. Khi có cập nhật mới cho bot, máy chủ Telegram sẽ tự động gửi (push) cập nhật đó đến địa chỉ URL này. Phương pháp này thường hiệu quả hơn cho các bot có lượng truy cập lớn vì nó giúp giảm tải cho máy chủ bot và cung cấp phản hồi thời gian thực nhanh hơn.
 - **Bot xử lý logic:** Bot xử lý yêu cầu (dựa vào mã code do lập trình viên viết).

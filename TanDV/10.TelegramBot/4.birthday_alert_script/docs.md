@@ -56,19 +56,19 @@ done < "$BIRTHDAY_FILE"
 
 Cấp quyền thực thi:
 
-```shell
+```bash
 sudo chmod +x birthday_alert_bot.sh
 ```
 
 Mở cron:
 
-```shell
+```bash
 crontab -e
 ```
 
 Thêm nội dung dưới đây để chạy mỗi 8h sáng:
 
-```shell
+```cron
 0 8 * * * /home/ubuntu/scripts/birthday_alert_bot.sh
 ```
 

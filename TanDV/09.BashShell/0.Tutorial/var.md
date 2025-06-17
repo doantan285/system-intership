@@ -46,7 +46,6 @@ echo "All args: $@"
 Chạy thử:
 
 ```bash
-#!/bin/bash
 bash info.sh one two three
 ```
 

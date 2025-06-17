@@ -12,4 +12,4 @@
 - **Lập kế hoạch dung lượng:** Dự đoán nhu cầu tài nguyên trong tương lai dựa trên xu hướng sử dụng hiện tại.
 - **Bảo mật:** Phát hiện các hoạt động đáng ngờ có thể chỉ ra một vi phạm bảo mật.
 
-**Monitoring** có thể được thực hiện thủ công thông qua các lệnh dòng lệnh hoặc tự động hóa bằng các công cụ monitoring chuyên dụng (như **Nagios**, **Zabbix**, **Prometheus**, **Grafana**)
+**Monitoring** có thể được thực hiện thủ công thông qua các lệnh dòng lệnh hoặc tự động hóa bằng các công cụ monitoring chuyên dụng (như **Nagios**, **Zabbix**, **Prometheus**, **Grafana**).

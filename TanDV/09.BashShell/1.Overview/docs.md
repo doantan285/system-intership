@@ -8,9 +8,9 @@
 
 **Bash Shell** là một chương trình giao tiếp giữa người dùng và hệ điều hành, chủ yếu dùng trong các hệ thống Unix/Linux. Cụ thể:
 
-- **Bash (Bourne Again SHell)** được phát triển như một bản cải tiến của sh (Bourne shell) truyền thống.
+- **Bash (Bourne Again Shell)** được phát triển như một bản cải tiến của sh (Bourne shell) truyền thống.
 - **Shell** là chương trình đọc lệnh người dùng gõ vào, thực thi lệnh đó, rồi trả kết quả lại.
-- **Bash** vừa là **trình thông dịch lệnh (command interpreter)**, vừa hỗ trợ **ngôn ngữ lập trình script**, cho phép bạn viết file script để tự động hóa công việc.
+- **Bash** vừa là **trình thông dịch lệnh (command interpreter)**, vừa hỗ trợ **ngôn ngữ lập trình script**, cho phép viết file script để tự động hóa công việc.
 
 Ví dụ:
 
@@ -229,17 +229,18 @@ echo $((x+y))
 #!/bin/bash
 trap 'echo "An error occurred at line $LINENO"' ERR
 
-# Lệnh lỗi sẽ được bắt
-echo "Start of script"
-non_existing_command   # Lệnh này sẽ gây lỗi
-echo "End of script"
+echo "start"
+non_existing_command    # error
+echo "end"
 ```
 
 Kết quả:
 
-```nginx
-Start of script
-An error occurred at line 6
+```bash
+start
+trap.sh: line 5: non_existing_command: command not found
+An error occurred at line 5
+end
 ```
 
 So sánh nhanh:

@@ -16,7 +16,7 @@ Giúp quản trị viên nhanh chóng phát hiện quá tải, treo tiến trìn
 top
 ```
 
-Sau khi chạy, lệnh hiển thị thông tin thời gian thực, cập nhật liên lục (mặc định là 3 giây). Bạn có thể thay đổi thời gian cập nhật bằng cách nhấn phím `d` và nhập số giây mong muốn.
+Sau khi chạy, lệnh hiển thị thông tin thời gian thực, cập nhật liên lục (mặc định là 3 giây). Có thể thay đổi thời gian cập nhật bằng cách nhấn phím `d` và nhập số giây mong muốn.
 
 ![top command](./images/top.png)
 
@@ -40,7 +40,7 @@ Thời gian hệ thống:
 
 Task:
 
-- `142 total`: tổng số tiến trình đang chạy là 142.
+- `142 total`: tổng số tiến trình đang tồn tại là 142.
 - `1 running`: có 1 tiến trình đang chạy.
 - `141 sleeping`: có 141 tiến trình đang ngủ (không hoạt động).
 - `0 stopped`: không có tiến trình nào bị dừng lại.
