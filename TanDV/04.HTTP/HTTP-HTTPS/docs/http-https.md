@@ -184,7 +184,7 @@ Giao thức HTTPS (HyperText Transfer Protocol Secure) là phiên bản bảo m�
 
 HTTPS hoạt động bằng cách mã hóa dữ liệu truyền tải giữa client (trình duyệt) và server (máy chủ web), sử dụng giao thức TLS (Transport Layer Security) hoặc SSL (Secure Sockets Layer).
 
-![how SSL work?](../images/ssl.png)
+![how does SSL work?](../images/SSL.png)
 
 **Quy trình thiết lập kết nối HTTPS (TLS/SSL Handshake)** gồm 5 bước: Client Hello -> Server Hello -> Xác thực chứng chỉ -> Trao đổi khóa -> Mã hóa kết nối
 

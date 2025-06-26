@@ -14,7 +14,7 @@ Hệ thống CA (Certificate Authority) sử dụng mật mã bất đối xứn
 
 **Private Key (Khóa bí mật):**
 
-- Chỉ thuộc về chủ sở hữu chứng chủ (webserver).
+- Chỉ thuộc về chủ sở hữu chứng chỉ (webserver).
 - Được dùng để giải mã dữ liệu đã được mã hóa bằng Public Key.
 - Server có thể bị giả mạo nếu bị lộ.
 
@@ -155,7 +155,6 @@ Chứng chỉ SSL chứa các thông tin quan trọng, bao gồm:
 - **Signature Algorithm:** Thuật toán mã hóa được sử dụng (RSA, ECC, v.v.)
 
 ### 3. Các loại chứng chỉ do CA cấp
-
 
 **Domain Validation (DV) SSL - Xác thực tên miền:**
 
