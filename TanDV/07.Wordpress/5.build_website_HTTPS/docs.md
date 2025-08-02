@@ -34,7 +34,7 @@ sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/apache2/ss
 - `-keyout`: Chỉ định đường dẫn lưu tệp tin khóa riêng.
 - `-out`: Chỉ định đường dẫn lưu tệp tin chứng chỉ.
 
-### Bước 3: Tạo file cấu hình VirtualHost cho HTTPS:
+### Bước 3: Tạo file cấu hình VirtualHost cho HTTPS
 
 Tạo file mới:
 

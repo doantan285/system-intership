@@ -2,7 +2,7 @@
 
 ## Giả định
 
-- Zabbix server IP: `192.168.3.115`
+- Zabbix server IP: `192.168.133.129`
 - Máy ảo ubuntu là host cần giám sát (agent)
 
 ## Các bước triển khai
@@ -42,7 +42,7 @@ Server=192.168.3.115
 ServerActive=192.168.3.115
 
 # Hostname của agent (tên này sẽ hiển thị trên Zabbix server)
-Hostname=ubuntu
+Hostname=ubuntan
 ```
 
 - Kiểm tra hostname của máy với lệnh `hostname`

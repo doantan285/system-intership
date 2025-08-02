@@ -144,7 +144,7 @@ Sửa thành:
 
 ```nginx
 listen 8081;
-server_name 192.168.3.125;
+server_name 192.168.133.136;
 ```
 
 ### 8. Cấu hình PHP frontend
@@ -181,7 +181,7 @@ sudo firewall-cmd --reload
 Mở trình duyệt truy cập:
 
 ```bash
-http://<IP_ADDRESS>/zabbix
+http://<IP_ADDRESS>:8081
 ```
 
 **Đăng nhập:**

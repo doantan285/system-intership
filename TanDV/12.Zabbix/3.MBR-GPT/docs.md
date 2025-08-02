@@ -1,6 +1,6 @@
 # Tìm hiểu MBR và GPT
 
-**MBR (Master Boot Record)** và **GPT (GUID Partition Table)** là hai phương pháp chính mà ổ đĩa cứng hoặc SSD sử dụng để tổ chức thông tin về các phân vùng (partitions) trên chúng. Chúng xác định cách dữ liệu được lưu trữ, số lượng phân vùng có thể tạo và cách máy tính khởi động từ ổ đĩa đó.
+**MBR (Master Boot Record)** và **GPT (GUID Partition Table)** là hai phương pháp chính mà ổ đĩa cứng hoặc SSD (Solid State Drive) sử dụng để tổ chức thông tin về các phân vùng (partitions) trên chúng. Chúng xác định cách dữ liệu được lưu trữ, số lượng phân vùng có thể tạo và cách máy tính khởi động từ ổ đĩa đó.
 
 ![MBR vs GPT](./images/mbr-gpt.png)
 
@@ -14,7 +14,7 @@
 - **Cách hoạt động:** Khi máy tính khởi động, BIOS sẽ đọc MBR ở Sector 0, thực thi mã khởi động và tải hệ điều hành vào bộ nhớ.
 - **Hạn chế:**
   - Chỉ hỗ trợ ổ đĩa tối đa 2TB (do dùng địa chỉ LBA 32-bit). Nếu ổ đĩa lớn hơn, phần dung lượng vượt quá sẽ không được nhận dạng hoặc sử dụng.
-  - Chỉ tạo được tối đa 4 phân vùng chính (nếu muốn nhiều hơn phải dùng pphaan vùng mở rộng).
+  - Chỉ tạo được tối đa 4 phân vùng chính (nếu muốn nhiều hơn phải dùng phân vùng mở rộng).
   - Độ bền kém: Bảng phân vùng MBR chỉ có một bản sao duy nhất. Nếu Sector 0 bị hỏng, thông tin về các phân vùng có thể bị mất, khiến dữ liệu khó truy cập.
 
 ### Cấu trúc MBR

@@ -2,7 +2,7 @@
 
 ## Giả định
 
-- Zabbix server IP: `192.168.3.115`
+- Zabbix server IP: `192.168.133.136`
 - Máy windows 11 là host cần giám sát (agent)
 
 ## Các bước triển khai
@@ -38,8 +38,8 @@ D:\Zabbix Agent\zabbix_agentd.conf
 Mở file bằng Notepad hoặc bất kỳ trình soạn thảo văn bản nào, tìm và chỉnh sửa các dòng sau:
 
 ```conf
-Server=192.168.3.125
-ServerActive=192.168.3.125
+Server=192.168.133.136
+ServerActive=192.168.133.136
 Hostname=raccoon
 ```
 
@@ -65,7 +65,7 @@ Chạy thành công:
 
 - **1. Truy cập giao diện web Zabbix:**
 
-  - `http://192.168.3.115:8081/zabbix`
+  - `http://192.168.133.136:8081`
 
 - **2. Đăng nhập:**
 
@@ -77,7 +77,7 @@ Chạy thành công:
 
 - **4. Nhập thông tin host:**
 
-  - Host name: `raccoon` (tên máy windows)
+  - Host name: `windows` (tên máy windows)
   - Groups: Chọn `Windows servers` hoặc tạo mới
   - Agent interfaces: Nhập IP máy Windows
 
