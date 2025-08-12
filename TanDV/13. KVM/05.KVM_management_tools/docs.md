@@ -286,6 +286,17 @@ sudo virt-manager
 
 ![virt-manager](./images/virt-manager.png)
 
+Trong trường hợp ssh không hỗ trợ x11-forwarding (lỗi bởi server):
+
+```bash
+# Tải các gói hỗ trợ (centos stream 9)
+sudo dnf install xorg-x11-xauth xorg-x11-utils
+# Chỉnh các dòng thành nội dung sau trong file /etc/ssh/sshd_config
+X11Forwarding yes
+X11DisplayOffset 10
+X11UseLocalhost no
+```
+
 Tạo 1 máy ảo: `file` -> `New Virtual Machine`
 
 ![create vm](./images/create_vm.png)
