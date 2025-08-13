@@ -64,7 +64,7 @@
 - Được cài đặt trực tiếp trên phần cứng vật lý của máy chủ, không cần hệ điều hành máy chủ (host OS) bên dưới. Nó truy cập và quản lý trực tiếp tài nguyên phần cứng.
 - Cấu trúc: `Phần cứng vật lý` -> `Type 1 Hypervisor` -> `Các Máy ảo (Guest OS)`.
 - Ứng dụng: Thường được sử dụng trong môi trường doanh nghiệp, trung tâm dữ liệu để ảo hóa máy chủ (server virtualization).
-- Ví dụ: VMware vSphere ESXi, Microsoft Hyper-V (trên Windows Server), Citrix XenServer, Xen (như bạn đã đề cập, Xen là một Type 1 Hypervisor mã nguồn mở).
+- Ví dụ: VMware vSphere ESXi, Microsoft Hyper-V (trên Windows Server), Citrix XenServer, Xen (một Type 1 Hypervisor mã nguồn mở).
 
 **Hypervisor loại 2 (Hosted Hypervisor):**
 
