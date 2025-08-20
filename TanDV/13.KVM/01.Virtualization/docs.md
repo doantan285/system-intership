@@ -183,7 +183,7 @@ Containerization: Docker, LXC (Linux Containers).
 - Hiệu suất thấp hơn do mô phỏng toàn bộ phần cứng.
 - Tiêu tốn tài nguyên hơn so với các phương pháp khác.
 
-### 2. Ảo hóa bán phần (Partial Virtualization)
+### 2. Ảo hóa bán phần (Paravirtualization)
 
 **Ảo hóa bán phần (Para-Virtualization)** là công nghệ ảo hóa trong đó máy ảo sử dụng hệ điều hành được chỉnh sửa để tương tác trực tiếp với hypervisor, thay vì mô phỏng toàn bộ phần cứng.
 

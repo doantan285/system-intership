@@ -1,6 +1,6 @@
 # Tìm hiểu các chế độ card mạng trong KVM
 
-**KVM** bản chất không quy định cứng "có 3 loại card mạng". Thay vào đó, kiểu kết nối mạng (network mode) của máy ảo **KVM** phụ thuộc vào cách bạn cấu hình bridge, NAT, hay isolated network qua các công cụ như `libvirt`, `virt-manager`, `virsh`, hoặc `qemu-system`.
+**KVM** bản chất không quy định cứng "có 3 loại card mạng". Thay vào đó, kiểu kết nối mạng (network mode) của máy ảo **KVM** phụ thuộc vào cách cấu hình bridge, NAT, hay isolated network qua các công cụ như `libvirt`, `virt-manager`, `virsh`, hoặc `qemu-system`.
 
 ## Phân loại theo chức năng cơ bản
 

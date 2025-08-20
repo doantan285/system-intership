@@ -119,7 +119,7 @@
 
 ### 1. Dung lượng
 
-Để kiểm tra dung lượng của 2 định dạng này, ta sẽ dùng lệnh `qemu-img` để tạo ra một file có định dạng raw và một file có định dạng qcow2 cả 2 file nàu đều có dung lượng là 2G.
+Để kiểm tra dung lượng của 2 định dạng này, ta sẽ dùng lệnh `qemu-img` để tạo ra một file có định dạng raw và một file có định dạng qcow2, cả 2 file nàu đều có dung lượng là 2G.
 
 **File Raw:**
 
@@ -137,7 +137,7 @@ qemu-img create -f qcow2 file.qcow2 2G
 
 ### 2. Hiệu năng
 
-Để test hiệu năng giữa 2 định dạng nàym sử dụng lệnh `dd` để đọc và ghi dữ liệu từ các file trên.
+Để test hiệu năng giữa 2 định dạng này, sử dụng lệnh `dd` để đọc và ghi dữ liệu từ các file trên.
 
 **Đọc dữ liệu:** `raw` < `qcow2`
 

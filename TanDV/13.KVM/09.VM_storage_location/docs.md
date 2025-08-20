@@ -7,6 +7,7 @@ Trong hầu hết các hệ thống Linux (như CentOS, Ubuntu) khi sử dụng 
 ### 1. File ảnh đĩa (Disk Images)
 
 Mặc định: `/var/lib/libvirt/images/`
+
 ![disk images](./images/disk_images.png)
 
 - Lưu trữ các file đại diện cho ổ đĩa cứng của máy ảo (virtual disk images). Các định dạng phổ biến là `.qcow2` (phổ biến nhất, hỗ trợ snapshot, clone) hoặc `.raw` (ổ đĩa thô).
@@ -14,6 +15,7 @@ Mặc định: `/var/lib/libvirt/images/`
 ### 2. Thư mục chứa file `.xml` thông số kỹ thuật của VM
 
 Mặc định: `/etc/libvirt/qemu/`
+
 ![XML files](./images/xml_file.png)
 
 - Lưu trữ các file cấu hình máy ảo dưới định dạng XML. Mỗi máy ảo sẽ có một file XML riêng (ví dụ: ten_may_ao.xml). File này mô tả tất cả các thông số của máy ảo như CPU, RAM, ổ đĩa ảo, card mạng ảo, BIOS/UEFI, v.v.
@@ -21,9 +23,11 @@ Mặc định: `/etc/libvirt/qemu/`
 ### 3. File Log và PID của máy ảo đang chạy
 
 `/var/log/libvirt/qemu/`: log files cho mỗi VM
+
 ![log files](./images/log_file.png)
 
 `/var/run/libvirt/qemu/`: PID files cho các VM đang chạy
+
 ![PID files](./images/pid_file.png)
 
 ## II. Cấu trúc thư mục và các file quan trọng

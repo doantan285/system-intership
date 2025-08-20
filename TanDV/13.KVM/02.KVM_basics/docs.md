@@ -135,7 +135,7 @@ QEMU giao tiếp với phần cứng thật qua Linux host
 3. **Cấu hình máy ảo:** Người dùng cần cấu hình các thông số cho VM như hệ điều hành, CPU, RAM, ổ đĩa, mạng,...
 4. **Khởi động máy ảo:** Khi VM được khởi động, KVM sẽ tạo một môi trường ảo riêng biệt cho VM.
 5. **Chạy hệ điều hành khách:** Hệ điều hành khách được cài đặt và chạy trong môi trường ảo.
-6 **Quản lý máy ảo:** Người dùng có thể sử dụng các công cụ quản lý VM để theo dõi, điều khiển và quản lý các VM.
+6. **Quản lý máy ảo:** Người dùng có thể sử dụng các công cụ quản lý VM để theo dõi, điều khiển và quản lý các VM.
 
 **Cơ chế hoạt động chi tiết:**
 

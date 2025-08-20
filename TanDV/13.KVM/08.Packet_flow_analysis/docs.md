@@ -79,7 +79,7 @@
 ### 1. Các thành phần chính trong sơ đồ Host-Only (Isolated)
 
 - **Host Server:** Máy chủ vật lý chạy Hypervisor (KVM).
-- **2 Virtual Machine (Máy ảo):** Các máy ảo được chạy trên Host Server
+- **2 Virtual Machine (Máy ảo):** Các máy ảo được chạy trên Host Server.
 - **virtual network switch in isolated mode (Switch mạng ảo ở chế độ cô lập):** Đây là một switch ảo được tạo trên Host Server. Trong KVM/Libvirt, nó cũng là một Linux Bridge, nhưng nó không được kết nối với bất kỳ card mạng vật lý nào của Host.
 - **Network (Mạng bên ngoài):** Đại diện cho mạng vật lý bên ngoài Host Server.
 
@@ -89,8 +89,8 @@
 
 **2.1 Kết nối nội bộ trong host:**
 
-- Các card mạng ảo của các Virtual Machines được kết nối vào virtual network switch in isolated mode.
-- Virtual network switch này không có bất kỳ kết nối nào với card mạng vật lý của Host Server. Điều này được thể hiện rõ bằng mũi tên chéo đỏ bị gạch bỏ giữa Host Server và virtual network switch.
+- Các card mạng ảo của các **Virtual Machines** được kết nối vào **virtual network switch in isolated mode**.
+- **Virtual network switch** này không có bất kỳ kết nối nào với card mạng vật lý của Host Server. Điều này được thể hiện rõ bằng mũi tên chéo đỏ bị gạch bỏ giữa **Host Server** và **virtual network switch**.
 
 **2.2 Giao tiếp giữa các VM (nội bộ trên cùng Host):**
 
@@ -104,7 +104,7 @@ Khi một gói tin từ một máy ảo muốn gửi đến máy ảo khác trê
 
 **2.3 Không có giao tiếp với External Network:**
 
-- Do virtual network switch không có kết nối vật lý nào ra bên ngoài, bất kỳ gói tin nào mà máy ảo cố gắng gửi ra ngoài (ví dụ: đến Internet) sẽ bị drop (loại bỏ) tại switch ảo.
+- Do **virtual network switch** không có kết nối vật lý nào ra bên ngoài, bất kỳ gói tin nào mà máy ảo cố gắng gửi ra ngoài (ví dụ: đến Internet) sẽ bị drop (loại bỏ) tại switch ảo.
 - Ngược lại, không có gói tin nào từ External Network có thể đến được các máy ảo trong mạng Host-Only này.
 
 ## IV. Switch ảo và card vật lý
