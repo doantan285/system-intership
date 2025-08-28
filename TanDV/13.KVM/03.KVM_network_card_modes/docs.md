@@ -7,7 +7,7 @@
 | Loại | Chức năng |
 |------|-----------|
 | **NAT** | Máy ảo truy cập Internet qua IP của host (giống NAT router) |
-| **Host-only** | Chỉ giao tiếp với host, không có internet |
+| **Host-only (isolated)** | Chỉ giao tiếp với host, không có internet |
 | **Bridged** | Máy ảo nằm chung mạng với host và các thiết bị khác |
 
 >Đây là cách phân loại thường thấy trong VirtualBox, VMware, và nhiều tài liệu tổng quát

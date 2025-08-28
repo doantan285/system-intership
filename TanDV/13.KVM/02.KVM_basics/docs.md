@@ -27,7 +27,7 @@
 
 **KVM** thuộc Hypervisor loại 1 (Type 1), còn gọi là **hypervisor bare-metal**. Vì **KVM** dựa vào **Linux** làm host OS, nên trông giống Hypervisor Type 2 (dùng hệ điều hành), nhưng thực chất KVM là một module trong kernel, tức là chạy ở mức nhân => bản chất là Type 1.
 
-### 2. So sánh KVM với các loại hypervisor còn lại
+**So sánh KVM với các loại hypervisor còn lại:**
 
 | Tiêu chí | KVM | VMware ESXi | Microsoft Hyper-V | Xen | VirtualBox/VMware WS |
 |----------|-----|-------------|-------------------|-----|-----------|

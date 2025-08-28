@@ -34,6 +34,104 @@ ip a                 # Hiển thị IP của bridge và các interface
 - Libvirt có thể tự động tạo bridge như `virbr0` khi cấu hình NAT.
 - Nếu tự tạo bridge `br0`, cần chỉnh `/etc/network/interfaces` hoặc dùng `nmcli` (nếu có NetworkManager).
 
+### 5. Tạo và quản lý Linux Bridge
+
+**5.0 Kiểm tra điều kiện:**
+
+```bash
+nmcli general status            # NetworkManager phải running
+nmcli device status             # xem ens33 đã được NM quản lý (managed) chưa
+# nếu “unmanaged”:
+sudo nmcli device set ens33 managed yes
+```
+
+**5.1 Tạo bridge & gán IP (tĩnh):**
+
+```bash
+# Tạo connection cho bridge (tự bật khi boot)
+sudo nmcli con add type bridge ifname testbr con-name testbr autoconnect yes
+
+# Đặt địa chỉ IPv4 tĩnh, gateway, DNS
+sudo nmcli con mod testbr ipv4.addresses 192.168.0.142/24
+sudo nmcli con mod testbr ipv4.gateway 192.168.0.1
+sudo nmcli con mod testbr ipv4.dns "8.8.8.8 1.1.1.1"
+sudo nmcli con mod testbr ipv4.method manual
+
+# Bật STP để tránh loop, giảm trễ
+sudo nmcli con mod testbr bridge.stp yes
+sudo nmcli con mod testbr bridge.forward-delay 0
+
+# Cần DHCP thay vì tĩnh? Dùng:
+sudo nmcli con mod testbr ipv4.method auto
+```
+
+![create and assign static ip](./images/create-assign_ip.png)
+
+**5.2 Biến ens33 thành “port” của bridge:**
+
+```bash
+# Có 2 cách (chọn một):
+
+# Cách A (sạch): xoá connection cũ của ens33 rồi tạo slave
+# xem connection name hiện tại của ens33:
+nmcli -f NAME,DEVICE,TYPE con show | grep ens33
+
+# xoá connection cũ (chỉ xoá cấu hình NM, không xoá thiết bị)
+sudo nmcli con delete ens33
+
+# tạo slave & gắn ens33 vào testbr
+sudo nmcli con add type bridge-slave ifname ens33 master testbr con-name ens33 autoconnect yes
+
+
+# Cách B (an toàn): giữ connection cũ nhưng vô hiệu hoá tự động bật
+sudo nmcli con mod "<ten-connection-cu>" connection.autoconnect no
+sudo nmcli con add type bridge-slave ifname ens33 master testbr con-name ens33 autoconnect yes
+```
+
+**5.3 Kích hoạt:**
+
+```bash
+# bật bridge trước, rồi bật slave
+sudo nmcli con up testbr
+sudo nmcli con up ens33
+```
+
+> Nếu gặp “device is unmanaged”, xem lại bước 0, đảm bảo ens33 do NM quản lý và không có dịch vụ mạng khác can thiệp.
+
+**5.4 Kiểm tra:**
+
+```bash
+ip -br a                         # testbr phải có IP, ens33 không còn IP
+bridge link                      # ens33 là port của testbr
+nmcli -f GENERAL.STATE con show testbr
+ping -c 3 192.168.0.1           # thử ping gateway
+```
+
+![checking](./images/checking.png)
+
+Quản lý thường dùng:
+
+```bash
+# Xem chi tiết cấu hình
+nmcli con show testbr
+nmcli con show ens33
+# Đổi IP/GW/DNS sau này
+sudo nmcli con mod testbr ipv4.addresses 192.168.0.142/24
+sudo nmcli con mod testbr ipv4.gateway 192.168.0.1
+sudo nmcli con mod testbr ipv4.dns "8.8.4.4 1.1.1.1"
+sudo nmcli con up testbr
+# Bật/tắt bridge hoặc slave
+sudo nmcli con down ens33
+sudo nmcli con down testbr
+sudo nmcli con up testbr
+sudo nmcli con up ens33
+# Xoá bridge & trả ens33 về như cũ
+sudo nmcli con delete ens33
+sudo nmcli con delete testbr
+# tạo lại kết nối “Wired” bình thường cho ens33 (DHCP)
+sudo nmcli con add type ethernet ifname ens33 con-name ens33 ipv4.method auto autoconnect yes
+```
+
 ## II. Công nghệ storage trong KVM
 
 Trong KVM, storage là nơi lưu trữ đĩa ảo (VM disk) và các file liên quan đến máy ảo (ISO, snapshot,...).
