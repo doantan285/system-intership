@@ -1,142 +1,151 @@
-# Phân tích đường đi gói tin với 3 chế độ card mạng
+# Các chế độ card mạng
 
 ## I. Bridged
 
-![bridged](./images/bridged.png)
+### 1. Cấu trúc mạng Bridge
 
-### 1. Các thành phần trong sơ đồ bridged
+![bridged](./images/bridge_structure.png)
 
-- **Server with Hypervisor:** Đây là máy chủ vật lý đang chạy một Hypervisor (như KVM).
-- **Hai máy chủ ảo (Virtual Machines):** Đây là các máy ảo (VMs) được tạo và chạy trên Hypervisor.
-- **vNIC (Virtual Network Interface Card):** Mỗi máy ảo có một card mạng ảo (vNIC).
-- **Virtual Switch (Switch ảo):** là một thành phần phần mềm được tạo và quản lý bởi Hypervisor trên Server. Trong KVM, đây chính là Linux Bridge (ví dụ: `br0`).
-- **pNIC (Physical Network Interface Card):** card mạng vật lý trên Server, kết nối với mạng vật lý bên ngoài.
-- **Physical Switch (Switch vật lý):** Switch vật lý nằm ngoài Server, kết nối Server với mạng bên ngoài.
-- **External Network:** Đại diện cho mạng bên ngoài (mạng LAN của bạn, Internet, v.v.).
+- **vfs ( virtual file system)**: tạo 1 phân vùng để nhận gói tin forward data từ máy ảo thông qua forward database.
+- **fd (forward database)**: là cổng giao tiếp chuyển tiếp dữ liệu giữa máy ảo với bridge.
+- **Bridge**: có chức năng giống với switch layer 2.
+- **Port**: có chức năng tương đương với port của switch thật.
 
 ### 2. Cách thức hoạt động Bridged
 
-**2.1 Kết nối bên trong server ảo:**
+Khi có 1 gói tin từ máy ảo muốn đi ra mạng internet thì:
 
-- Mỗi **vNIC** của máy ảo được kết nối trực tiếp vào **Virtual Switch**.
-- Các **pNIC** của Server cũng được kết nối (hoặc gắn vào) **Virtual Switch**.
-- Điều này tạo ra một "cầu nối" logic, nơi **Virtual Switch** đóng vai trò trung gian kết nối giữa các máy ảo và giữa máy ảo với mạng vật lý bên ngoài thông qua **pNIC**.
-
-**2.2 Giao tiếp giữa các VM (nội bộ trên cùng Host):**
-
-- Khi một gói tin từ một máy ảo muốn gửi đến máy ảo khác trên cùng một Server:
-- Gói tin từ vNIC của VM nguồn đi vào Virtual Switch.
-- Virtual Switch (giống như một switch vật lý) sẽ kiểm tra địa chỉ MAC đích của gói tin.
-- Nếu địa chỉ MAC đích là của một vNIC khác cũng được kết nối với Virtual Switch, Virtual Switch sẽ chuyển tiếp gói tin đó trực tiếp đến vNIC của VM đích.
-- Đường đi (màu đỏ trong sơ đồ): VM1 -> vNIC -> Virtual Switch -> vNIC -> VM2.
-
-**2.3 Giao tiếp giữa VM và External Network (ra/vào mạng vật lý):**
-
-- Gói tin từ vNIC của VM đi vào Virtual Switch.
-- Virtual Switch kiểm tra địa chỉ MAC đích. Nếu địa chỉ MAC đích nằm ngoài Server (ví dụ: MAC của router hoặc một máy tính vật lý khác trên mạng LAN), Virtual Switch sẽ chuyển tiếp gói tin đó qua một trong các pNIC được kết nối với nó.
-- pNIC sẽ gửi gói tin ra Physical Switch.
-- Đường đi (màu đỏ -> màu xanh trong sơ đồ): VM -> vNIC -> Virtual Switch -> pNIC -> Physical Switch -> External Network.
-- Phản hồi (màu xanh -> màu đỏ trong sơ đồ): External Network -> Physical Switch -> pNIC -> Virtual Switch -> vNIC -> VM.
-
-> Quá trình này hoàn toàn diễn ra bên trong Host, không cần gói tin phải đi ra pNIC hay Physical Switch.
+- **Bước 1:** Gói tin từ máy ảo đi ra cổng eth0 của máy ảo đó.
+- **Bước 2:** Gói tin từ cổng eth0 đi đến forward database.
+- **Bước 3:** Từ forward database gửi gói tin đến vùng vfs
+- **Bước 4:** Kernel lấy gói tin từ vùng vfs chuyển đến bridge qua các tap interface.
+- **Bước 5:** Từ Bridge gửi gói tin qua eth0 của máy thật và đi ra ngoài internet.
 
 ## II. NAT
 
-![nat](./images/nat.png)
-
 ### 1. Các thành phần trong sơ đồ NAT
 
-- **Host Machine (Máy chủ KVM):** Đây là máy vật lý chạy hệ điều hành Linux nơi bạn cài đặt KVM và `libvirt`.
-- **Virtual Machine (Máy ảo):** Đây là máy ảo khách được tạo trên KVM.
-- **Virtual Network adapter (Card mạng ảo của VM):** Card mạng mà bạn gán cho máy ảo.
-- **Virtual Network Switch 'virbr0' (Switch ảo):** Một switch ảo được tạo ra trên Host Machine. Nó tương tự như một switch vật lý, kết nối các máy ảo với nhau và với các thành phần mạng ảo khác trên Host. `virbr0` là tên mặc định cho mạng ảo NAT mặc định trong `libvirt`.
-- **NAT Device (Thiết bị NAT):** Đây là một thành phần ảo hoạt động như một Router có chức năng NAT. Nó được tích hợp vào mạng ảo `virbr0`.
-- **DHCP Server (Máy chủ DHCP):** Một máy chủ DHCP ảo cũng được tích hợp vào mạng ảo `virbr0`. Nhiệm vụ của nó là cấp phát địa chỉ IP tự động cho các máy ảo kết nối vào `virbr0`.
-- **Network (Mạng bên ngoài):** Đại diện cho mạng vật lý bên ngoài Host Machine (Internet hoặc mạng LAN của bạn).
+![nat](./images/nat_structure.png)
+
+- **Internet:** Nguồn bên ngoài cung cấp kết nối, dùng IP công cộng (172.16.2.147).
+- **enp0s25:** Giao diện mạng vật lý trên host, kết nối Internet, có IP 172.16.2.147.
+- **Virtual Router (virbr2):** Router ảo trong KVM, quản lý mạng NAT, có IP 192.168.100.1, thực hiện NAT giữa mạng nội bộ và Internet.
+- **eth0 (VM1):** Giao diện mạng của VM1, IP 192.168.100.5, trong mạng NAT.
+- **eth0 (VM2):** Giao diện mạng của VM2, IP 192.168.100.6, trong mạng NAT.
 
 ### 2. Cách thức hoạt động NAT
 
-**1. Kết nối nội bộ trong host:**
-
-- Card mạng ảo của VM được kết nối vào **Virtual Network Switch 'virbr0**'.
-- **NAT Device** và **DHCP Server** cũng được kết nối vào **Virtual Network Switch 'virbr0'**.
-
-**2. Cấp phát IP cho VM:**
-
-- Khi VM khởi động, nó sẽ gửi yêu cầu DHCP.
-- **DHCP Server** (tích hợp trong `libvirt` và gắn với `virbr0`) sẽ cấp phát một địa chỉ IP (ví dụ: 192.168.122.X) cho VM. Địa chỉ IP này thuộc một mạng con riêng biệt và biệt lập (private subnet) được quản lý bởi virbr0 (ví dụ: 192.168.122.0/24).
-
-**3. Định tuyến và NAT ra mạng ngoài:**
-
-1. Khi VM gửi gói tin ra Network, gói tin sẽ đi từ card mạng ảo của VM đến **Virtual Network Switch 'virbr0'**.
-2. Từ `virbr0`, gói tin được chuyển đến **NAT Device**.
-3. **NAT Device** thay đổi địa chỉ nguồn của gói tin từ IP riêng của VM thành IP của Host Machine trên mạng vật lý.
-4. Sau khi NAT, gói tin được gửi ra Network thông qua card mạng vật lý của Host Machine.
-5. Khi có phản hồi từ Network, gói tin sẽ đến Host Machine, **NAT Device** sẽ đảo ngược quá trình **NAT (de-NAT)**, thay đổi IP đích từ IP của Host Machine trở lại IP riêng của VM, sau đó chuyển gói tin về cho VM thông qua `virbr0`.
+- **Bước 1:** Gói tin từ Internet đến host qua enp0s25 (172.16.2.147).
+- **Bước 2:** Virtual Router (virbr2, 192.168.100.1) nhận gói, thực hiện NAT, ánh xạ IP công cộng sang IP nội bộ (192.168.100.5 hoặc 192.168.100.6).
+- **Bước 3:** Gói tin được chuyển đến VM1 hoặc VM2 qua giao diện eth0 tương ứng.
+- **Bước 4:** Gói tin từ VM1/VM2 đi ngược lại qua virbr2, NAT lại thành IP 172.16.2.147, gửi ra Internet.
 
 ## III. Host-only (Isolated)
 
 ### 1. Các thành phần chính trong sơ đồ Host-Only (Isolated)
 
-- **Host Server:** Máy chủ vật lý chạy Hypervisor (KVM).
-- **2 Virtual Machine (Máy ảo):** Các máy ảo được chạy trên Host Server.
-- **virtual network switch in isolated mode (Switch mạng ảo ở chế độ cô lập):** Đây là một switch ảo được tạo trên Host Server. Trong KVM/Libvirt, nó cũng là một Linux Bridge, nhưng nó không được kết nối với bất kỳ card mạng vật lý nào của Host.
-- **Network (Mạng bên ngoài):** Đại diện cho mạng vật lý bên ngoài Host Server.
+```pgsql
+                +-------------------+
+                |       Internet    |
+                +-------------------+
+                         X   (Không tới được)
+
+                        (Host NIC thật: eth0, 172.16.x.x)
+
++--------------------------------------------------------------+
+|                         HOST (Linux)                         |
+|                                                              |
+|   +-------------------+        +-------------------------+   |
+|   | virbr2 (192.168.100.1) <-> | Bridge Switch (Layer 2) |   |
+|   +-------------------+        +-------------------------+   |
+|            ^                               ^                 |
+|            |                               |                 |
+|          vnet0                           vnet1               |
+|            |                               |                 |
+|   +-------------+                  +-------------+           |
+|   |   VM1       |                  |    VM2      |           |
+|   | eth0        |                  | eth0        |           |
+|   | 192.168.100.5|                 |192.168.100.6|           |
+|   +-------------+                  +-------------+           |
++--------------------------------------------------------------+
+```
+
+- **VM (eth0)** → được nối vào một tap/vnet trên host (ví dụ `vnet0`).
+- **Linux bridge** (ví dụ `virbr2`) ↔ gắn các `vnetX`. Bridge không gắn NIC vật lý nào.
+- **Địa chỉ IP trên bridge** (ví dụ `virbr2`: `192.168.100.1/24`). Libvirt có thể chạy dnsmasq để phát DHCP/DNS cho dải này.
+- **iptables**: libvirt tạo rule chặn FORWARD ra/vào `virbr2`; host không NAT.
 
 ### 2. Cách thức hoạt động của Host-Only (Isolated)
 
-![host-only](./images/host-only.png)
+**2.1 VM ↔ VM (cùng mạng isolated):**
 
-**2.1 Kết nối nội bộ trong host:**
-
-- Các card mạng ảo của các **Virtual Machines** được kết nối vào **virtual network switch in isolated mode**.
-- **Virtual network switch** này không có bất kỳ kết nối nào với card mạng vật lý của Host Server. Điều này được thể hiện rõ bằng mũi tên chéo đỏ bị gạch bỏ giữa **Host Server** và **virtual network switch**.
-
-**2.2 Giao tiếp giữa các VM (nội bộ trên cùng Host):**
-
-Khi một gói tin từ một máy ảo muốn gửi đến máy ảo khác trên cùng một Host:
-
-- Gói tin từ card mạng ảo của VM nguồn đi vào **virtual network switch**.
-- **Virtual network switch** sẽ kiểm tra địa chỉ MAC đích của gói tin.
-- Vì cả hai VM đều được kết nối với cùng switch ảo này, switch sẽ chuyển tiếp gói tin trực tiếp đến card mạng ảo của VM đích.
-
->Các máy ảo trong cùng mạng Host-Only có thể giao tiếp với nhau mà không cần gói tin rời khỏi Host Server.
-
-**2.3 Không có giao tiếp với External Network:**
-
-- Do **virtual network switch** không có kết nối vật lý nào ra bên ngoài, bất kỳ gói tin nào mà máy ảo cố gắng gửi ra ngoài (ví dụ: đến Internet) sẽ bị drop (loại bỏ) tại switch ảo.
-- Ngược lại, không có gói tin nào từ External Network có thể đến được các máy ảo trong mạng Host-Only này.
-
-## IV. Switch ảo và card vật lý
-
-Đây là mối quan hệ cốt lõi giữa máy ảo và mạng vật lý bên ngoài. Switch ảo là trung gian kết nối giữa card mạng máy ảo và card mạng thật của host. Tùy chế độ cấu hình, switch ảo sẽ gắn thế nào với card thật
-
-| Thành phần | Vai trò |
-| --- | --- |
-| **Switch ảo (`virbr0`, `br0`)** | Giống như switch mạng nội bộ – kết nối các máy ảo với nhau và ra ngoài |
-| **Card mạng thật (eth0, eno1, wlp3s0...)** | Giao tiếp thật với thế giới bên ngoài – mạng LAN/Internet |
-
-### 1. NAT (`virbr0`)
-
-```css
-[VM]──► [virbr0 (switch ảo)] ──► [NAT trên host] ──► [eth0] ──► Internet
+```rust
+VM1 (192.168.100.5) --eth0--> vnet0 --> virbr2 (bridge) --> vnet1 --> VM2 (192.168.100.6)
 ```
 
-- Switch ảo `virbr0` không kết nối trực tiếp card mạng thật.
-- Gói tin từ máy ảo → `virbr0` → host NAT lại qua card thật → Internet.
+1. VM1 gửi ARP để tìm MAC của VM2 → broadcast qua vnet0 vào virbr2.
+2. Bridge học bảng MAC và chuyển frame sang vnet1 của VM2.
+3. L2/L3 đều nội bộ bridge, không đi qua FORWARD/NAT. VM1 ↔ VM2 giao tiếp trực tiếp trong LAN ảo.
 
->Trong trường hợp này, switch ảo chỉ dùng để nối các máy ảo, sau đó host làm NAT ra ngoài.
+**2.2 VM ↔ Host:**
 
-### 2. Bridged (`br0`)
-
-```css
-[VM]──┐
-      ├──► [br0 (switch ảo)] ◄──► [eth0 (card mạng thật)] ◄──► Router/Internet
-[VM]──┘
+```rust
+VM1 --eth0--> vnet0 --> virbr2 (IP 192.168.100.1) --> xử lý tại host (INPUT chain)
 ```
 
-- Switch ảo `br0` gắn trực tiếp card mạng thật vào bridge.
-- Máy ảo có thể lấy IP từ mạng ngoài (router, DHCP thật).
-- Mỗi máy ảo như là một máy vật lý độc lập trong mạng LAN.
+Ví dụ: VM ping `192.168.100.1` (IP của `virbr2`):
 
->Trong trường hợp này, switch ảo nối trực tiếp với card thật, giống như cắm cáp mạng thật vào một switch thật.
+1. VM ARP 192.168.100.1 → host trả lời MAC của bridge.
+2. Gói ICMP đi VM → vnet0 → virbr2.
+3. Vì đích là IP local của host, gói đi theo luồng INPUT và được host xử lý (không qua FORWARD).
+
+**2.3 VM ↔ Host (IP của bridge):**
+
+Ví dụ: VM ping 192.168.100.1 (IP của virbr2):
+
+1. VM ARP 192.168.100.1 → host trả lời MAC của bridge.
+2. Gói ICMP đi `VM → vnet0 → virbr2`.
+3. Vì đích là IP local của host, gói đi theo luồng INPUT và được host xử lý (không qua FORWARD). VM ping/SSH được vào host (nếu dịch vụ bind trên `virbr2`).
+
+**2.4 VM → Internet (bị chặn):**
+
+Ví dụ: VM ping `8.8.8.8`:
+
+1. VM gửi gói tới gateway 192.168.100.1 (do DHCP cấp).
+2. Gói vào host qua `virbr2`. Đích không phải IP local → gói cần forward ra NIC ngoài.
+3. Bị chặn vì:
+
+   - `net.ipv4.ip_forward=0` (mặc định), hoặc
+   - iptables của libvirt đặt rule REJECT/DROP trên chain FORWARD cho virbr2,
+   - và không có NAT. Kết quả: không ra được Internet trong mô hình isolated mặc định.
+
+**2.5 Internet → VM (từ ngoài vào):**
+
+Không có tuyến/port-forward/NAT vào mạng 192.168.100.0/24, iptables còn chặn FORWARD.
+
+=> Không thể truy cập VM từ ngoài (đúng nghĩa “host-only/isolated”).
+
+**2.6 Muốn "host-only mà vẫn ra ngoài":**
+
+Bật router/NAT trên host:
+
+```bash
+# Cho phép forward
+sudo sysctl -w net.ipv4.ip_forward=1
+# NAT ra NIC ngoài (đổi eth0 theo NIC thật)
+sudo iptables -t nat -A POSTROUTING -s 192.168.100.0/24 -o eth0 -j MASQUERADE
+# Cho phép forward qua bridge
+sudo iptables -A FORWARD -i virbr2 -o eth0 -j ACCEPT
+sudo iptables -A FORWARD -i eth0 -o virbr2 -m state --state ESTABLISHED,RELATED -j ACCEPT
+```
+
+Khi đó: VM → gateway 192.168.100.1 → FORWARD + MASQUERADE → Internet.
+
+**2.7 Lệnh kiểm tra nhanh:**
+
+```bash
+ip a            # xem virbr2, vnetX
+bridge link     # các port của bridge
+iptables -S     # rule FORWARD libvirt tạo
+tcpdump -i virbr2 arp or icmp   # quan sát ARP/ICMP trong mạng isolated
+```
