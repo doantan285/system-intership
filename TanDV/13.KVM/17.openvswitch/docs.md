@@ -23,22 +23,148 @@
 - **Cơ sở dữ liệu cấu hình giao dịch** với API C và Python
 - **Hiệu năng cao** nhờ Linux kernel module cho forwarding
 
-### 3. Các thành phần chính
+## II. Open vSwitch components
+
+### 1. Các thành phần chính
 
 ![open vswitch components](./images/ovs-components.png)
 
-- `ovs-vswitchd`: Daemon thực thi chuyển mạch, đi kèm với mô-đun nhân Linux để chuyển tiếp dựa trên luồng.
-- `ovsdb-server`: Máy chủ cơ sở dữ liệu nhẹ, cung cấp cấu hình cho `ovs-vswitchd`.
-- `ovs-dpctl`: Công cụ để cấu hình mô-đun chuyển mạch nhân.
-- `Scripts và specs`: Hỗ trợ xây dựng gói RPM cho Red Hat Enterprise Linux và gói deb cho Ubuntu/Debian.
-- `ovs-vsctl`: Tiện ích để truy vấn và cập nhật cấu hình của ovs-vswitchd.
-- `ovs-appctl`: Tiện ích gửi lệnh đến các daemon Open vSwitch đang chạy.
+**1.1 `ovs-vswitchd`**
 
-### 4. Các công cụ bổ sung
+- Là một trong những thành phần cốt lõi.
+- Đây là **daemon (tiến trình nền)** điều khiển tất cả các switch của **Open vSwitch** trên hệ thống.
+- Khi khởi động lần đầu, nó lấy cấu hình ban đầu từ `ovsdb-server` thông qua **giao thức quản lý OVSDB**.
+- Giao tiếp với **kernel module** bằng giao thức **netlink**, và giao tiếp với hệ thống thông qua giao diện trừu tượng **netdev**.
+- Chịu trách nhiệm triển khai các tính năng của switch như:
+  - **Mirroring** (sao chép gói tin để giám sát).
+  - **Bonding** (ghép nhiều NIC để tăng băng thông/HA).
+  - **VLANs** (gắn thẻ, phân chia VLAN).
 
-- `ovs-ofctl`: Tiện ích để truy vấn và kiểm soát các chuyển mạch và bộ điều khiển OpenFlow.
-- `ovs-pki`: Tiện ích để tạo và quản lý hạ tầng khóa công khai cho các chuyển mạch OpenFlow.
-- `ovs-testcontroller`: Bộ điều khiển OpenFlow đơn giản, hữu ích cho việc kiểm thử (không dùng trong môi trường sản xuất).
-- `Patch cho tcpdump`: Cho phép tcpdump phân tích các thông điệp OpenFlow.
+**1.2 `ovsdb-server`**
 
-## II. Các thao tác quản lý Open vSwitch
+- Là một **cơ sở dữ liệu nhẹ** lưu trữ các cấu hình ở mức switch.
+- Nhờ có **ovsdb-server**, các thay đổi cấu hình sẽ được lưu giữ lâu dài, không bị mất sau khi khởi động lại hệ thống.
+- Giao tiếp với `ovs-vswitchd` thông qua **giao thức quản lý OVSDB**.
+
+**1.3 `Open vSwitch Kernel Module`**
+
+- Thành phần xử lý **chuyển mạch (switching)** và **tunneling** ở mức kernel.
+- Khi một gói tin đến:
+  - Nếu có luồng (flow) tương ứng đã tồn tại → xử lý ngay tại kernel (nhanh).
+  - Nếu chưa có flow → gói tin được chuyển lên **userspace** để `ovs-vswitchd` xử lý.
+- Được thiết kế để nhanh và đơn giản, không biết gì về OpenFlow (mọi giao tiếp OpenFlow đều do `ovs-vswitchd` xử lý).
+- Triển khai khái niệm **datapath**:
+  - Datapath là một tập hợp các port vật lý hoặc ảo.
+  - Có thể coi như một “bridge” nhưng nằm trong kernel thay vì userspace.
+  - Mỗi datapath có thể có nhiều port, được gọi là vports.
+  - Quản lý bằng lệnh `ovs-dpctl`.
+
+**1.4 `OpenFlow Controller (Bộ điều khiển OpenFlow)`**
+
+- Không phải là một phần trực tiếp của OVS, nhưng rất quan trọng trong môi trường thực tế.
+- Các flow lưu trong ovs-vswitchd sẽ bị mất nếu dịch vụ khởi động lại hoặc bị crash.
+- Để đảm bảo các flow quan trọng được duy trì lâu dài, ta thường dùng một OpenFlow Controller.
+- Controller này thường được cài đặt trên remote server (vì thế nó được vẽ ở không gian khác trong sơ đồ), nhưng cũng có thể chạy trên cùng server với OVS.
+
+### 2. Open vSwitch utilities
+
+**2.1 `ovs-vsctl`**
+
+- Dùng để truy vấn và cập nhật cấu hình của `ovs-vswitchd`.
+- Một số thao tác phổ biến:
+  - Tạo, xoá, quản lý bridge.
+  - Thêm/xoá port vào bridge.
+  - Cấu hình VLAN, bonding, mirror.
+- Ví dụ:
+
+```bash
+sudo ovs-vsctl show
+sudo ovs-vsctl add-br br0
+sudo ovs-vsctl add-port br0 ens33
+```
+
+**2.2 `ovs-ofctl`**
+
+- Dùng để truy vấn và điều khiển các switch và controller theo chuẩn **OpenFlow**.
+- Cho phép quản lý **flow entries** (các quy tắc xử lý gói tin).
+
+- Ví dụ:
+
+```bash
+sudo ovs-vsctl show
+sudo ovs-vsctl add-br br0
+sudo ovs-vsctl add-port br0 ens33
+```
+
+**2.3 `ovs-dpctl`**
+
+- Dùng để cấu hình kernel module (datapath) của OVS.
+- Cho phép:
+  - Tạo, sửa, xoá datapath.
+  - Thêm hoặc xoá vport trong datapath.
+- Ví dụ:
+
+```bash
+sudo ovs-dpctl show
+sudo ovs-dpctl add-dp dp0
+sudo ovs-dpctl add-if dp0 ens33
+```
+
+**2.4 `ovs-appctl`**
+
+- Là công cụ để gửi lệnh trực tiếp đến các daemon của Open vSwitch (như `ovs-vswitchd`, `ovsdb-server`).
+- Dùng cho mục đích quản trị nâng cao, debug và kiểm tra trạng thái.
+- Ví dụ:
+
+```bash
+sudo ovs-appctl vlog/list       # xem cấu hình logging
+sudo ovs-appctl bridge/dump-flows br0
+sudo ovs-appctl -t ovs-vswitchd exit   # dừng ovs-vswitchd
+```
+
+## III. Open vSwitch Modes
+
+Bridge trong Open vSwitch có thể hoạt động theo hai chế độ khi chuyển tiếp gói tin: **Normal mode** hoặc **Flow mode**.
+
+### 1. Normal mode (Chế độ thường)
+
+Trong chế độ này, cơ chế hoạt động của **Open vSwitch** tương tự như một switch Ethernet truyền thống dựa trên **bảng MAC**.
+
+**Quy trình:**
+
+1. Khi một frame (gói tin lớp 2) được nhận lần đầu, switch sẽ so sánh địa chỉ MAC nguồn với bảng MAC:
+   - Nếu địa chỉ MAC nguồn chưa tồn tại trong bảng → switch thêm địa chỉ MAC này vào bảng, kèm theo số cổng mà frame được nhận.
+2. Tiếp theo, switch so sánh địa chỉ MAC đích trong frame với bảng MAC:
+   - Nếu tìm thấy địa chỉ đích trong bảng → frame được chuyển tiếp ra cổng tương ứng.
+   - Nếu không tìm thấy địa chỉ đích trong bảng → switch thực hiện flooding (phát ra tất cả các cổng ngoại trừ cổng nhận frame).
+
+Để xem bảng địa chỉ MAC, sử dụng lệnh:
+
+```bash
+ovs-appctl fdb/show <bridge_name>
+```
+
+### 2. Flow mode (Chế độ theo luồng – Flow-based)
+
+Trong chế độ này, việc chuyển tiếp gói tin dựa trên bảng luồng (flow tables), được định nghĩa theo chuẩn OpenFlow.
+
+**Đặc điểm chính:**
+
+- Một switch có thể có một hoặc nhiều flow table.
+- Flow table có thể được:
+  - Tạo thủ công bằng lệnh **ovs-ofctl add-flow**.
+  - Hoặc được **OpenFlow Controller** thiết lập và quản lý tự động.
+
+**Quy trình:**
+
+1. Khi một gói tin đi vào switch, nó sẽ được xử lý bởi bảng luồng có số thứ tự nhỏ nhất (thường là bảng 0).
+   - Mỗi bảng chứa nhiều **flow entry**.
+2. Mỗi flow entry bao gồm:
+   - **Match fields:** gồm các thông tin từ header gói tin (IP destination, VLAN ID, cổng UDP nguồn, mã ICMP, cổng vào…) và có thể thêm metadata.
+   - Nếu gói tin khớp nhiều flow entry → entry có **độ ưu tiên (priority)** cao nhất sẽ được chọn.
+3. Sau khi tìm được flow entry phù hợp, phần Action trong entry sẽ quyết định xử lý tiếp theo:
+   - **required actions:** forward đến cổng cụ thể, drop (loại bỏ), hoặc xử lý qua một nhóm (group).
+   - **optional actions:** thay đổi TTL, chỉnh sửa trường header, thêm (push) thẻ VLAN,…
+4. Nếu gói tin không khớp bất kỳ flow entry nào → tình huống này gọi là table-miss. Khi đó gói tin sẽ:
+   - Gửi thông tin tới Controller (nếu có).
+   - Nếu không có Controller, gói tin sẽ bị drop hoặc chuyển tiếp sang bảng luồng khác (nếu được cấu hình).

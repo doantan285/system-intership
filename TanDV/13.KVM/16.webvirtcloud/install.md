@@ -141,3 +141,18 @@ Tài khoản mặc định là:
 
 - Username: `admin`
 - Password: `admin`
+
+### 6. Adding Compute host
+
+For Ubuntu host run the script located in our Github repository.
+
+```bash
+LINK=https://raw.githubusercontent.com/cloudspinx/linux-bash-scripts/main/webvirtcloud/debian-ubuntu-kvm-prep.sh
+wget -O - $LINK| sudo sh
+```
+
+Confirm supervisor service
+
+```bash
+supervisorctl status
+```
