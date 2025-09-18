@@ -88,14 +88,6 @@ sudo ovs-vsctl add-port br0 ens33
 - Dùng để truy vấn và điều khiển các switch và controller theo chuẩn **OpenFlow**.
 - Cho phép quản lý **flow entries** (các quy tắc xử lý gói tin).
 
-- Ví dụ:
-
-```bash
-sudo ovs-vsctl show
-sudo ovs-vsctl add-br br0
-sudo ovs-vsctl add-port br0 ens33
-```
-
 **2.3 `ovs-dpctl`**
 
 - Dùng để cấu hình kernel module (datapath) của OVS.
@@ -110,6 +102,8 @@ sudo ovs-dpctl add-dp dp0
 sudo ovs-dpctl add-if dp0 ens33
 ```
 
+![ovs-dpctl show](./images/ovs-dpctl_show.png)
+
 **2.4 `ovs-appctl`**
 
 - Là công cụ để gửi lệnh trực tiếp đến các daemon của Open vSwitch (như `ovs-vswitchd`, `ovsdb-server`).
@@ -121,6 +115,10 @@ sudo ovs-appctl vlog/list       # xem cấu hình logging
 sudo ovs-appctl bridge/dump-flows br0
 sudo ovs-appctl -t ovs-vswitchd exit   # dừng ovs-vswitchd
 ```
+
+Mô hình sử dụng Open vSwitch:
+
+![ovs architecture](./images/ovs_architecture.png)
 
 ## III. Open vSwitch Modes
 

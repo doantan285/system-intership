@@ -6,7 +6,7 @@
 
 ```bash
 # Tải gói chính thức trong kho APT
-sudo apt install -y openvswitch-common openvswitch-switch
+sudo apt install -y openvswitch-switch
 ```
 
 - `openvswitch-common`: Chứa các tệp chung cần thiết cho **Open vSwitch**, bao gồm thư viện, tiện ích (`ovs-vsctl`, `ovs-ofctl`, v.v.) và tệp cấu hình cơ bản. Đây là gói cơ sở cho các thành phần Open vSwitch.
@@ -137,6 +137,18 @@ ping -c 4 192.168.133.2
 
 ![check network](./images/check_network.png)
 
+Nếu gặp lỗi `Device or resource busy`:
+
+1. Tắt mạng mặc định của libvirt (virbr0) - muốn VM dùng OVS (br0) làm bridge chính:
+
+    ```bash
+    sudo virsh net-destroy default
+    sudo virsh net-autostart --disable default
+    ```
+
+2. Sau đó, chỉ giữ `br0` của OVS và gắn VM vào đó.
+3. Lúc này `ens33` chỉ tham gia một bridge duy nhất → `br0`, nên không bị conflict.
+
 ### 8. Một số lệnh quản lý hữu ích
 
 Liệt kê bridge:
@@ -162,3 +174,45 @@ Xóa bridge:
 ```bash
 sudo ovs-vsctl del-br br0
 ```
+
+## II. Cài đặt Cài đặt Open vSwitch trên Ubuntu 24.04 (tự động thêm IP)
+
+### 1. Để netplan chỉ cấu hình interface vật lý (ens33) mà không gán IP
+
+```yaml
+network:
+  version: 2
+  ethernets:
+    ens33: {}
+```
+
+### 2. Tạo script tự động tạo bridge và gán IP
+
+- Tạo script `/usr/local/bin/setup-ovs.sh`:
+
+```bash
+#!/bin/bash
+sudo ovs-vsctl --may-exist add-br br0
+sudo ovs-vsctl --may-exist add-port br0 ens33
+sudo ip addr flush dev ens33
+sudo ip addr add 192.168.133.133/24 dev br0
+sudo ip link set br0 up
+sudo ip route add default via 192.168.133.2
+echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf
+echo "nameserver 8.8.4.4" | sudo tee -a /etc/resolv.conf
+```
+
+- Cấp quyền thực thi:
+
+```bash
+sudo chmod +x /usr/local/bin/setup-ovs.sh
+```
+
+### 3. enable dịch vụ
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable br0
+```
+
+- Sau reboot, script sẽ chạy và gắn IP cho `br0`.
