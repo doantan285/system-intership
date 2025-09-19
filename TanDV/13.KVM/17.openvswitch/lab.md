@@ -97,3 +97,61 @@ sudo ovs-vsctl list interface name,type
 # Tìm kiếm record có name=br0 trong bảng Bridge
 sudo ovs-vsctl find Bridge name=br0
 ```
+
+## II. Cấu hình máy ảo KVM sử dụng ovs
+
+### 1. Cài plugin để libvirt hiểu OVS
+
+```bash
+sudo apt install openvswitch-switch
+sudo apt install libvirt-daemon-system libvirt-clients
+```
+
+### 2. Tạo OVS bridge network trong `/etc/libvirt/qemu/networks/ovs.xml`
+
+```xml
+<network>
+  <name>ovs-net</name>
+  <forward mode='bridge'/>
+  <bridge name='t-br0'/>
+  <virtualport type='openvswitch'/>
+</network>
+```
+
+Kích hoạt:
+
+```bash
+sudo virsh net-define /etc/libvirt/qemu/networks/ovs.xml
+sudo virsh net-start ovs-net
+sudo virsh net-autostart ovs-net
+```
+
+Sửa đổi file XML của máy ảo:
+
+```xml
+<interface type='network'>
+  <mac address='52:54:00:84:53:6a'/>
+  <source network='ovs-net'/>
+  <model type='virtio'/>
+</interface>
+```
+
+### 3. Kiểm tra
+
+```bash
+# Trên host
+sudo ovs-vsctl show
+```
+
+![vnetx](./images/vnetx.png)
+
+- Cổng `vnetX` đã được thêm (chính là interface nối với VM).
+
+```bash
+# Trên host
+sudo virsh domiflist centos7.0
+```
+
+![ovs-net](./images/ovs-net.png)
+
+- Cột `Source` = `ovs-net` nghĩa là VM đã nối qua OVS.

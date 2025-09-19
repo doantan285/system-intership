@@ -4,20 +4,26 @@
 
 ### 1. Khái niệm
 
-**VM template (mẫu máy ảo)** là một bản sao được chuẩn bị sẵn của một máy ảo (VM). Nó bao gồm hệ điều hành đã được cài đặt, các ứng dụng, cấu hình mạng và các thiết lập khác, được dùng làm cơ sở để tạo nhanh các máy ảo mới.
+**VM template (virtual machine template)** là một bản sao được chuẩn bị sẵn của một máy ảo (VM). Nó bao gồm hệ điều hành đã được cài đặt, các ứng dụng, cấu hình mạng và các thiết lập khác, được dùng làm cơ sở để tạo nhanh các máy ảo mới.
 
 Thay vì phải cài đặt và cấu hình thủ công từng máy ảo từ đầu, người dùng có thể sử dụng một template để sao chép hàng loạt các máy ảo giống hệt nhau. Điều này giúp tiết kiệm thời gian, đảm bảo tính nhất quán và giảm thiểu sai sót trong quá trình triển khai.
 
 ### 2. Đặc điểm của VM template
 
-- Là một máy ảo đặc biệt, không được dùng để chạy công việc trực tiếp.
-- Đã cài đặt hệ điều hành sẵn (Linux/Windows).
-- Thường đã tích hợp sẵn các gói cơ bản (tools, agent, driver).
-- Đã được **“generalize”** (dọn dẹp thông tin định danh):
-  - Xóa hostname, SSH key, machine-id.
-  - Đặt mật khẩu trống hoặc tích hợp cloud-init/sysprep để sinh thông tin mới.
-  - Gỡ MAC address cũ.
-- Được đánh dấu chỉ đọc (read-only) trong các hệ thống ảo hóa, để tránh bị thay đổi.
+- **Read-only:** Template thường được đánh dấu chỉ đọc, để không ai vô tình khởi động hay thay đổi nó.
+- **Chuẩn hóa:** VM được tạo từ template đều có cấu hình OS, phần mềm, driver… giống nhau.
+- **Nhanh chóng:** Thay vì cài đặt OS từ đầu, bạn chỉ việc deploy từ template → tiết kiệm thời gian.
+- **Tự động hóa:** Kết hợp với công cụ như **cloud-init** (Linux) hoặc **Sysprep** (Windows), các máy ảo sinh ra từ template sẽ tự động đổi hostname, user, IP… để tránh bị trùng lặp.
+
+**Ví dụ:**
+
+![common](./images/common.png)
+
+- Đây là các bước để tạo VM thông thường. Bước 2-5 đều lặp lại => tốn thời gian.
+
+![use template](./images/use_template.png)
+
+- Với việc sử dụng template, các bước được rút ngắn đáng kể. Đồng nghĩa với việc rút ngắn thời gian triển khai các VM.
 
 ### 3. Mục đích
 
@@ -25,7 +31,27 @@ Thay vì phải cài đặt và cấu hình thủ công từng máy ảo từ đ
 - Tiết kiệm thời gian thay vì phải cài đặt OS từ ISO mỗi lần.
 - Đảm bảo tính nhất quán trong môi trường lab hoặc production.
 
-### 4. Clone và template
+### 4. Khác nhau giữa Clone và template
+
+#### 4.1 Clone VM
+
+- **Định nghĩa:** Là một bản VM đã được chuẩn hoá (cấu hình OS, phần mềm cơ bản, update sẵn…), rồi được chuyển sang trạng thái **read-only** để dùng làm mẫu.
+- **Mục đích:** Dùng để triển khai nhiều VM giống nhau nhanh chóng mà không phải cài đặt lại từ đầu.
+- **Đặc điểm:**
+  - Không dùng trực tiếp để chạy (thường không boot template).
+  - Khi cần VM mới → ta deploy từ template.
+  - Đảm bảo tính thống nhất (các VM sinh ra từ template giống nhau).
+  - Trong các hệ thống như vSphere, Proxmox, KVM + OpenStack → template giúp tạo cloud-init hoặc sysprep để tự động thay hostname, IP, user…
+
+#### 4.2 Template VM
+
+- **Định nghĩa:** Là bản sao chép nguyên xi (copy) từ một VM đang chạy hoặc đã tắt.
+- **Mục đích:** Dùng khi muốn nhân đôi một VM cụ thể (bao gồm cả trạng thái OS, dữ liệu, ứng dụng hiện tại).
+- **Đặc điểm:**
+  - Có thể clone cả VM đang chạy (hot clone) hoặc VM đã tắt (cold clone).
+  - Bản clone giữ nguyên mọi thứ: hostname, IP, config, dữ liệu.
+  - Nếu không chỉnh sửa sau clone → dễ gây trùng lặp (IP trùng, hostname trùng).
+  - Clone nhanh chóng nhưng không “chuẩn hóa” như template.
 
 ## II. Virt-sysprep
 
