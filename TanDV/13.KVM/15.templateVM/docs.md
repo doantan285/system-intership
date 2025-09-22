@@ -42,16 +42,21 @@ Thay vì phải cài đặt và cấu hình thủ công từng máy ảo từ đ
   - Khi cần VM mới → ta deploy từ template.
   - Đảm bảo tính thống nhất (các VM sinh ra từ template giống nhau).
   - Trong các hệ thống như vSphere, Proxmox, KVM + OpenStack → template giúp tạo cloud-init hoặc sysprep để tự động thay hostname, IP, user…
+- **Đặc điểm:**
+  - Có thể clone cả VM đang chạy (hot clone) hoặc VM đã tắt (cold clone).
+  - Bản clone giữ nguyên mọi thứ: hostname, IP, config, dữ liệu.
+  - Nếu không chỉnh sửa sau clone → dễ gây trùng lặp (IP trùng, hostname trùng).
+  - Clone nhanh chóng nhưng không “chuẩn hóa” như template.
 
 #### 4.2 Template VM
 
 - **Định nghĩa:** Là bản sao chép nguyên xi (copy) từ một VM đang chạy hoặc đã tắt.
 - **Mục đích:** Dùng khi muốn nhân đôi một VM cụ thể (bao gồm cả trạng thái OS, dữ liệu, ứng dụng hiện tại).
 - **Đặc điểm:**
-  - Có thể clone cả VM đang chạy (hot clone) hoặc VM đã tắt (cold clone).
-  - Bản clone giữ nguyên mọi thứ: hostname, IP, config, dữ liệu.
-  - Nếu không chỉnh sửa sau clone → dễ gây trùng lặp (IP trùng, hostname trùng).
-  - Clone nhanh chóng nhưng không “chuẩn hóa” như template.
+  - Không dùng trực tiếp để chạy (thường không boot template).
+  - Khi cần VM mới → ta deploy từ template.
+  - Đảm bảo tính thống nhất (các VM sinh ra từ template giống nhau).
+  - Trong các hệ thống như vSphere, Proxmox, KVM + OpenStack → template giúp tạo cloud-init hoặc sysprep để tự động thay hostname, IP, user…
 
 ## II. Virt-sysprep
 
