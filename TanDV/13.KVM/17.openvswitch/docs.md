@@ -166,3 +166,45 @@ Trong chế độ này, việc chuyển tiếp gói tin dựa trên bảng luồ
 4. Nếu gói tin không khớp bất kỳ flow entry nào → tình huống này gọi là table-miss. Khi đó gói tin sẽ:
    - Gửi thông tin tới Controller (nếu có).
    - Nếu không có Controller, gói tin sẽ bị drop hoặc chuyển tiếp sang bảng luồng khác (nếu được cấu hình).
+
+## IV. kiến trúc xử lý gói tin (Packet Processing) và luồng quản lý (Management Workflow) trong Open vSwitch
+
+![workflow](./images/workflow.png)
+
+- **Packet Processing (dòng đen):** xử lý gói dữ liệu thực sự (Data Plane).
+- **Management Workflow (dòng xám):** cấu hình, giám sát, quản lý OVS (Control Plane + Management Plane).
+
+### 1. Packet Processing
+
+Đây là cách OVS xử lý gói tin khi nó đi qua switch:
+
+1. **Từ NetDevice → Datapath**
+   - Gói tin đi vào từ interface vật lý/ảo (eth0, tap, vnet, v.v.).
+   - Kernel Datapath nhận gói tin.
+2. **Upcall (nếu không có flow match trong kernel)**
+    - Nếu Datapath Flow Table không có entry phù hợp → gói tin được đẩy (upcall) lên userspace (ovs-vswitchd).
+3. **ovs-vswitchd xử lý bằng OpenFlow**
+    - ovs-vswitchd kiểm tra OpenFlow rules (được cấu hình bởi quản trị hoặc controller SDN).
+    - Nếu có rule → quyết định hành động (forward, drop, modify, output...).
+4. **Cập nhật Flow Table trong Kernel**
+    - ovs-vswitchd cài đặt rule mới vào Datapath Flow Table trong kernel để những gói tin sau được xử lý nhanh mà không cần lên userspace nữa.
+5. **Reinject**
+    - Gói tin đầu tiên được xử lý bởi ovs-vswitchd sẽ được gửi ngược lại vào Datapath để thực thi theo rule mới.
+6. **Datapath xử lý các gói tiếp theo**
+    - Các gói tiếp theo cùng flow match trực tiếp ở Kernel Flow Table → xử lý nhanh, không cần đi userspace.
+7. **Output ra NetDevice**
+    - Gói tin cuối cùng được gửi ra port đích (interface thật hoặc vNIC của VM).
+
+### 2. Management Workflow
+
+Đây là cách quản trị viên hoặc controller cấu hình và quản lý OVS:
+
+- **ovs-vsctl / ovsdb-tool → ovsdb**
+  - Lệnh quản lý cấu hình (tạo bridge, thêm port, VLAN, bond…) đi vào OVSDB.
+  - ovsdb giữ thông tin cấu hình (persistent state).
+- **ovsdb ↔ ovs-vswitchd**
+  - ovs-vswitchd lấy cấu hình từ ovsdb để biết switch có những bridge, port, VLAN nào.
+- **ovs-ofctl → ovs-vswitchd (OpenFlow)**
+  - ovs-ofctl (hoặc SDN controller như OpenDaylight, ONOS) cài đặt OpenFlow rules vào ovs-vswitchd.
+- **ovs-dpctl → Datapath**
+  - ovs-dpctl dùng để kiểm tra/trực tiếp chỉnh sửa flow trong kernel datapath (ít dùng trong quản lý thường ngày, chủ yếu debug).

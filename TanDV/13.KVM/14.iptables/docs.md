@@ -16,7 +16,7 @@
 Bộ sưu tập quy tắc trong iptables, mỗi bảng xử lý một loại tác vụ (ví dụ: `filter` cho lọc, `nat` cho NAT).
 
 - **filter (mặc định):** Bảng mặc định, dùng để lọc các gói tin, quyết định gói tin nào được phép đi qua (`ACCEPT`), bị từ chối (`REJECT`) hoặc bị loại bỏ hoàn toàn (`DROP`). Đây là bảng được sử dụng phổ biến nhất cho mục đích bảo mật.
-- **nat:** Dùng cho NAT, cho phép chuyển đổi địa chỉ IP và cổng của các gói tin. Nó thường được dùng để chia sẻ kết nối Internet từ một máy chủ sang nhiều máy khác trong mạng nội bộ..
+- **nat:** Dùng cho NAT, cho phép chuyển đổi địa chỉ IP và cổng của các gói tin. Nó thường được dùng để chia sẻ kết nối Internet từ một máy chủ sang nhiều máy khác trong mạng nội bộ.
 - **mangle:** Table này liên quan đến việc sửa header của gói tin, ví dụ chỉnh sửa giá trị các trường TTL, MTU, Type of Service.
 - **raw:** 1 gói tin có thể thuộc một kết nối mới hoặc cũng có thể là của 1 một kết nối đã tồn tại. Table raw cho phép bạn làm việc với gói tin trước khi kernel kiểm tra trạng thái gói tin
 
@@ -34,10 +34,10 @@ Chuỗi quy tắc trong mỗi bảng, định nghĩa điểm xử lý gói tin (
 
 Mỗi **Chain** chứa nhiều **Rule**, được kiểm tra theo thứ tự từ trên xuống. Khi khớp rule, sẽ thực hiện Target (ACCEPT, DROP, REJECT, MASQUERADE…).
 
-- **ACCEPT:** Chấp nhận gói tin, cho phép gói tin đi vào hệ thống
-- **DROP:** Loại bỏ gói tin, không có gói tin trả lời, giống như là hệ thống không tồn tại
-- **REJECT:** Loại bỏ gói tin nhưng có trả lời table gói tin khác, ví dụ trả lời table 1 gói tin “connection reset” đối với gói TCP hoặc bản tin “destination host unreachable” đối với gói UDP và ICMP
-- **LOG:** Chấp nhận gói tin nhưng có ghi lại log. Gói tin sẽ đi qua tất cả các rule chứ không dừng lại khi đã đúng với 1 rule đặt ra. Đối với những gói tin không khớp với rule nào cả mặc định sẽ được chấp nhận
+- **ACCEPT:** Chấp nhận gói tin, cho phép gói tin đi vào hệ thống.
+- **DROP:** Loại bỏ gói tin, không có gói tin trả lời, giống như là hệ thống không tồn tại.
+- **REJECT:** Loại bỏ gói tin nhưng có trả lời table gói tin khác, ví dụ trả lời table 1 gói tin “connection reset” đối với gói TCP hoặc bản tin “destination host unreachable” đối với gói UDP và ICMP.
+- **LOG:** Chấp nhận gói tin nhưng có ghi lại log. Gói tin sẽ đi qua tất cả các rule chứ không dừng lại khi đã đúng với 1 rule đặt ra. Đối với những gói tin không khớp với rule nào cả mặc định sẽ được chấp nhận.
 
 ## III. Cách thức hoạt động iptables
 
