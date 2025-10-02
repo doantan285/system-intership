@@ -167,7 +167,7 @@ Trong chế độ này, việc chuyển tiếp gói tin dựa trên bảng luồ
    - Gửi thông tin tới Controller (nếu có).
    - Nếu không có Controller, gói tin sẽ bị drop hoặc chuyển tiếp sang bảng luồng khác (nếu được cấu hình).
 
-## IV. kiến trúc xử lý gói tin (Packet Processing) và luồng quản lý (Management Workflow) trong Open vSwitch
+## IV. Kiến trúc xử lý gói tin (Packet Processing) và luồng quản lý (Management Workflow) trong Open vSwitch
 
 ![workflow](./images/workflow.png)
 
