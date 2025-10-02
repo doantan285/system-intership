@@ -137,3 +137,7 @@ Tạo Tài khoản Người dùng (User Settings):
 1. Sau khi tất cả các mục đã được cấu hình, nhấp vào Begin Installation.
 2. Trình cài đặt sẽ bắt đầu sao chép file và cài đặt hệ thống.
 3. Khi quá trình hoàn tất, nhấp vào Reboot System.
+
+### 4. Kiểm tra
+
+![check](../images/check.png)
